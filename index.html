@@ -178,6 +178,21 @@
             .struk-container::before, .struk-container::after { display: none !important; }
         }
     </style>
+
+    <!-- Dukungan PWA Ditambahkan di Sini -->
+    <link rel="manifest" href="manifest.json"/>
+    <link rel="apple-touch-icon" href="icon-192.png"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+    <script type="text/javascript">
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service Worker terdaftar!', reg))
+                    .catch(err => console.log('Service Worker gagal:', err));
+            });
+        }
+    </script>
 </head>
 <body>
     <div id='license-overlay'>
