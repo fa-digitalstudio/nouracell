@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset='UTF-8'/>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'/>
+    <meta content='#4F46E5' name='theme-color'/>
+    <title>Kasir - Sistem Penjualan</title>
+    <link href='https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Amiri&display=swap' rel='stylesheet'/>
+    
+    <style>
+        :root { --primary: #4F46E5; --primary-dark: #3730A3; --bg-color: #F8FAFC; --text-dark: #0F172A; --text-muted: #64748B; --card-bg: #FFFFFF; --border: #E2E8F0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        /* Tambahan anti-copy text (user-select: none) */
+        body { background-color: var(--bg-color); color: var(--text-dark); display: flex; flex-direction: column; min-height: 100vh; overscroll-behavior-y: none; overflow-x: hidden; width: 100%; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; padding-bottom: 70px; }
+        #license-overlay, .license-box, input, select, textarea, #card-alquran { -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; pointer-events: auto !important; } /* Membuka paksa akses input & klik */
+
+        /* App Bar & Sidebar */
+        .app-bar { background-color: var(--primary); color: white; padding: 0 20px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; display: flex; justify-content: center; align-items: center; height: 60px; width: 100%;}
+        .app-bar h1 { font-size: 18px; font-weight: 600; margin: 0; letter-spacing: 0.3px;}
+        .menu-btn { position: absolute; left: 16px; background: transparent; border: none; color: white; font-size: 24px; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; transition: opacity 0.2s;}
+        .menu-btn:active { opacity: 0.7; }
+        
+        /* Tombol Pesan Header Baru */
+        .msg-btn { position: absolute; right: 16px; background: transparent; border: none; color: white; font-size: 20px; cursor: pointer; padding: 4px; display: flex; align-items: center; justify-content: center; transition: opacity 0.2s; position: relative;}
+        .msg-btn-container { position: absolute; right: 16px; display: flex; align-items: center;}
+        .msg-btn:active { opacity: 0.7; }
+        .badge-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background: #EF4444; border-radius: 50%; display: none; box-shadow: 0 0 0 2px var(--primary);}
+
+        .side-menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); display: none; z-index: 9998; backdrop-filter: blur(2px); transition: opacity 0.3s;}
+        .side-menu { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: white; z-index: 9999; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 4px 0 15px rgba(0,0,0,0.1); display: flex; flex-direction: column;}
+        .side-menu.open { left: 0; }
+        .side-menu-header { padding: 25px 20px; background: var(--primary); color: white; font-size: 18px; font-weight: 700; }
+        .side-menu-item { padding: 18px 20px; text-align: left; background: none; border: none; border-bottom: 1px solid var(--border); font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 12px; color: var(--text-dark); width: 100%; font-weight: 500; transition: background 0.2s; border-left: 4px solid transparent;}
+        .side-menu-item:active { background: #F1F5F9; }
+        .side-menu-item.active { background: #EEF2FF; color: var(--primary); font-weight: 700; border-left: 4px solid var(--primary); }
+
+        /* Container & Card */
+        .container { max-width: 1000px; width: 100%; margin: 0 auto; padding: 16px; flex: 1; display: flex; flex-direction: column; box-sizing: border-box;}
+        
+        .card { background-color: var(--card-bg); padding: 24px; border-radius: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.02); margin-bottom: 16px; border: 1px solid rgba(226, 232, 240, 0.8); width: 100%; box-sizing: border-box; animation: fadeIn 0.3s ease-out;}
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Pembatas Ukuran Card di Desktop agar Rapi */
+        .card-form { max-width: 600px; margin: 0 auto; }
+        .card-table { max-width: 1000px; margin: 0 auto; }
+
+        .card h2 { font-size: 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; color: var(--text-dark); font-weight: 600;}
+        
+        /* =========================================
+           DESAIN POPUP MODERN & CANTIK (BARU)
+           ========================================= */
+        .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.55); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 20px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: opacity 0.3s ease; }
+        .popup-content { background: #ffffff; padding: 32px 24px; border-radius: 28px; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.05); animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; overflow: hidden; }
+        @keyframes popIn { 0% { transform: scale(0.85) translateY(15px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+        .popup-content::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--primary), #818CF8); }
+        .popup-content h3 { color: var(--text-dark); font-size: 20px; margin-bottom: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px;}
+        
+        /* Tombol Tutup Popup General */
+        .btn-tutup-popup { background: #F8FAFC; color: var(--text-dark); border: 1px solid var(--border); padding: 14px; border-radius: 100px; cursor: pointer; font-weight: 600; font-size: 14px; width: 100%; transition: all 0.2s ease; margin-top: 10px; }
+        .btn-tutup-popup:hover { background: #E2E8F0; color: #0F172A; }
+        .btn-tutup-popup:active { transform: scale(0.97); }
+
+        /* Desain Box Aktivasi Lisensi */
+        #license-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(248, 250, 252, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; z-index: 999999; padding: 20px; }
+        .license-box { background: #ffffff; padding: 40px 32px; border-radius: 32px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05); animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative;}
+        .license-box .icon-lock { font-size: 44px; margin-bottom: 20px; display: inline-flex; align-items: center; justify-content: center; background: #EEF2FF; width: 80px; height: 80px; border-radius: 50%; color: var(--primary); box-shadow: inset 0 4px 6px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(79, 70, 229, 0.15); }
+        .license-box h2 { color: var(--text-dark); font-size: 24px; margin-bottom: 12px; font-weight: 800; letter-spacing: -0.5px;}
+        .license-box p { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.6;}
+        .license-box input { width: 100%; padding: 18px; margin-bottom: 20px; border: 2px solid #E2E8F0; background: #F8FAFC; border-radius: 16px; font-size: 16px; outline: none; text-align: center; font-weight: 700; text-transform: uppercase; transition: all 0.3s ease; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);}
+        .license-box input:focus { border-color: var(--primary); background: #ffffff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); transform: translateY(-2px);}
+        .license-box button { width: 100%; background: linear-gradient(135deg, var(--primary), #6366F1); color: white; border: none; padding: 18px; border-radius: 16px; font-weight: 700; cursor: pointer; font-size: 16px; transition: all 0.2s; box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);}
+        .license-box button:hover { transform: translateY(-2px); box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.4); }
+        .license-box button:active { transform: scale(0.97); }
+        .license-error { color: #DC2626; font-size: 13px; font-weight: 600; margin-top: 16px; display: none; background: #FEF2F2; padding: 12px; border-radius: 12px; border: 1px dashed #FCA5A5;}
+
+        /* Desain Struk Cantik */
+        #popup-struk .popup-content { background: #F8FAFC; padding: 0; border-radius: 20px; overflow: hidden; }
+        .struk-container { background: #ffffff; padding: 28px 24px; margin: 16px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px dashed #CBD5E1; position: relative; }
+        /* Efek Zig-zag kertas struk */
+        .struk-container::before, .struk-container::after { content: ''; position: absolute; left: 0; right: 0; height: 8px; background-size: 16px 16px; z-index: 1;}
+        .struk-container::before { top: -8px; background-image: radial-gradient(circle at 8px 0, transparent 8px, #ffffff 9px); }
+        .struk-container::after { bottom: -8px; background-image: radial-gradient(circle at 8px 16px, transparent 8px, #ffffff 9px); }
+        .struk-actions { display: flex; gap: 12px; padding: 0 16px 20px; }
+        .btn-print { background: linear-gradient(135deg, #10B981, #059669); color: white; border: none; padding: 14px; border-radius: 14px; font-weight: 700; cursor: pointer; font-size: 14px; flex: 1; transition: all 0.2s; box-shadow: 0 8px 15px -3px rgba(16, 185, 129, 0.3); }
+        .btn-close-struk { background: #64748B; color: white; border: none; padding: 14px; border-radius: 14px; font-weight: 700; cursor: pointer; font-size: 14px; flex: 1; transition: all 0.2s; box-shadow: 0 8px 15px -3px rgba(100, 116, 139, 0.3); }
+        .btn-print:active, .btn-close-struk:active { transform: scale(0.96); }
+
+        /* Form */
+        .grid-2-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%;}
+        .form-group { margin-bottom: 16px; width: 100%;} 
+        .form-group label { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--text-muted); padding-left: 4px;}
+        .form-group input, .form-group select { width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 14px; outline: none; background: #F1F5F9; color: var(--text-dark); transition: all 0.2s; appearance: none; -webkit-appearance: none; box-sizing: border-box;}
+        .form-group input:focus, .form-group select:focus { background: #E2E8F0; box-shadow: inset 0 0 0 2px var(--primary);}
+        .form-group input[readonly] { background-color: #EEF2FF; font-weight: 700; color: var(--primary); }
+        .badge-stok { color: #D97706; font-size: 11px; font-weight: 600; background: #FEF3C7; padding: 2px 8px; border-radius: 6px;}
+        
+        /* Tombol Submit */
+        .btn-submit { width: 100%; background-color: var(--primary); color: white; padding: 16px; border: none; border-radius: 100px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2); transition: transform 0.1s, background 0.2s;}
+        .btn-submit:active { transform: scale(0.98); background-color: var(--primary-dark); }
+        .btn-submit:disabled { background-color: #94A3B8; box-shadow: none; cursor: not-allowed; }
+        .btn-refresh { padding: 8px 16px; font-size: 13px; background-color: #EEF2FF; color: var(--primary); border: none; border-radius: 100px; cursor: pointer; font-weight: 600;}
+        
+        /* Ringkasan Transaksi */
+        .info-total { background: var(--primary); padding: 20px; border-radius: 16px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); color: white;}
+        .info-total span:first-child { font-size: 12px; font-weight: 500; opacity: 0.9;}
+        .info-total span:last-child { font-size: 26px; font-weight: 700; }
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); background: white; box-sizing: border-box;} 
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--border); } 
+        th { color: var(--text-muted); background-color: #F8FAFC; font-weight: 600; font-size: 12px;}
+        .badge-lunas { background-color: #D1FAE5; color: #065F46; padding: 6px 12px; border-radius: 100px; font-size: 11px; font-weight: 600; display: inline-block;}
+        .badge-hutang { background-color: #FEE2E2; color: #991B1B; padding: 6px 12px; border-radius: 100px; font-size: 11px; font-weight: 600; display: inline-block;}
+
+        /* Responsif HP */
+        @media (min-width: 769px) { table { min-width: 600px; } body { padding-bottom: 0; } .bottom-nav { display: none !important; } }
+        @media (max-width: 768px) {
+            .app-bar { height: 56px; padding: 0 16px; } .app-bar h1 { font-size: 16px; } .menu-btn { font-size: 22px; left: 12px; padding: 8px;}
+            .container { padding: 10px; width: 100%; max-width: 100vw; overflow-x: hidden;} 
+            .card { padding: 16px; border-radius: 16px; margin-bottom: 0; width: 100%;} .card h2 { font-size: 15px; margin-bottom: 16px; }
+            .grid-2-cols { grid-template-columns: 1fr; gap: 0px; width: 100%; display: flex; flex-direction: column;}
+            .form-group { margin-bottom: 12px; width: 100%; } .form-group label { font-size: 11px; margin-bottom: 4px; }
+            .form-group input, .form-group select { padding: 14px; font-size: 13px; border-radius: 10px; width: 100%;}
+            .btn-submit { padding: 14px; font-size: 14px; margin-top: 4px; width: 100%;}
+            .info-total { padding: 16px; border-radius: 12px; margin-bottom: 16px; } .info-total span:last-child { font-size: 22px; }
+            .table-responsive { border: none; background: transparent; overflow-x: hidden; width: 100%;}
+            table, thead, tbody, tr, th, td { display: block; width: 100%; box-sizing: border-box;} thead { display: none; }
+            tr { background: white; margin-bottom: 10px; border-radius: 12px; padding: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 6px; align-items: center; width: 100%;}
+            td { padding: 0; border: none; font-size: 12px; text-align: left; white-space: normal;}
+            td:nth-child(1) { grid-column: 1 / -1; font-size: 14px; color: var(--text-dark); border-bottom: 1px dashed var(--border); padding-bottom: 6px; margin-bottom: 2px; display: flex; align-items: center;} td:nth-child(1)::before { content: '👤'; margin-right: 8px; font-size: 14px;}
+            td:nth-child(2) { grid-column: 1 / -1; font-weight: 600; color: var(--primary); font-size: 13px;} 
+            td:nth-child(3)::before { content: 'Total: Rp '; font-size: 10px; color: var(--text-muted); display: block; font-weight: normal;} td:nth-child(3) { font-weight: 700; font-size: 14px; color: var(--text-dark);} 
+            td:nth-child(4)::before { content: 'Jual: Rp '; font-size: 10px; color: var(--text-muted); display: block;}
+            td:nth-child(5)::before { content: 'Laba: Rp '; font-size: 10px; color: var(--text-muted); display: block;}
+            td:nth-child(6) { grid-column: 1 / -1; text-align: right; margin-top: 2px; border-top: 1px solid #F1F5F9; padding-top: 10px;} 
+            td[colspan="6"] { grid-column: 1 / -1 !important; text-align: center !important; padding: 20px 0 !important; color: var(--text-muted); font-weight: 500;} td[colspan="6"]::before { display: none !important; }
+        }
+
+        /* --- STYLE BOTTOM NAVIGATION BAR --- */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #FFFFFF; display: flex; justify-content: space-around; padding: 10px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 9997; border-top: 1px solid var(--border); padding-bottom: calc(10px + env(safe-area-inset-bottom)); transform: translateZ(0); -webkit-transform: translateZ(0); backface-visibility: hidden; will-change: transform; }
+        .bottom-nav-item { background: none; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--text-muted); cursor: pointer; width: 33.33%; gap: 3px; font-family: 'Poppins', sans-serif; transition: color 0.2s ease; }
+        .bottom-nav-item .icon { font-size: 20px; transition: transform 0.2s; filter: grayscale(100%) opacity(0.6); }
+        .bottom-nav-item.active { color: var(--primary); }
+        .bottom-nav-item.active .icon { filter: grayscale(0%) opacity(1); transform: scale(1.1); }
+    </style>
+
+    <style type='text/css'>
+        #struk-print table { display: table !important; width: 100% !important; }
+        #struk-print tr { display: table-row !important; background: transparent !important; box-shadow: none !important; border: none !important; padding: 0 !important; gap: 0 !important; grid-template-columns: none !important; }
+        #struk-print td { display: table-cell !important; padding: 2px 0 !important; border: none !important; font-size: 12px !important; text-align: left !important; color: #000 !important; }
+        
+        /* CSS Khusus Al-Qur&#39;an */
+        .quran-search { width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 12px; font-size: 14px; outline: none; background: #F8FAFC; margin-bottom: 16px; transition: all 0.2s; }
+        .quran-search:focus { border-color: var(--primary); background: #fff; }
+        .surah-list { display: flex; flex-direction: column; gap: 10px; max-height: 65vh; overflow-y: auto; padding-right: 4px; }
+        .surah-item { display: flex; justify-content: space-between; align-items: center; padding: 14px; background: #F8FAFC; border: 1px solid var(--border); border-radius: 14px; cursor: pointer; transition: all 0.2s; }
+        .surah-item:active { background: #EEF2FF; transform: scale(0.99); }
+        .surah-meta { display: flex; align-items: center; gap: 12px; }
+        .surah-num { width: 32px; height: 32px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+        .surah-title-id { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+        .surah-subtitle { font-size: 11px; color: var(--text-muted); }
+        .surah-title-ar { font-family: &#39;Amiri&#39;, serif; font-size: 20px; color: var(--primary); font-weight: 700; text-align: right; }
+        .btn-back-quran { background: #F1F5F9; color: var(--text-dark); border: 1px solid var(--border); padding: 10px 18px; border-radius: 100px; cursor: pointer; font-weight: 600; font-size: 13px; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px; transition: all 0.2s; }
+        .btn-back-quran:active { background: #E2E8F0; }
+        .ayah-list-box { display: flex; flex-direction: column; gap: 16px; max-height: 60vh; overflow-y: auto; padding-right: 4px; }
+        .ayah-card { padding: 16px 0; border-bottom: 1px dashed var(--border); display: flex; flex-direction: column; gap: 12px; }
+        .ayah-num-label { font-size: 11px; font-weight: 700; color: var(--primary); background: #EEF2FF; padding: 2px 8px; border-radius: 6px; width: fit-content; }
+        .ayah-arabic { font-family: &#39;Amiri&#39;, serif; font-size: 26px; text-align: right; direction: rtl; line-height: 2; color: #0F172A; font-weight: 500; word-wrap: break-word; }
+        .ayah-translation { font-size: 13px; color: var(--text-dark); line-height: 1.6; text-align: left; font-weight: 400; }
+        .quran-loading { text-align: center; padding: 30px 10px; color: var(--text-muted); font-size: 14px; font-weight: 500; }
+
+        @media print {
+            body { background: #fff !important; color: #000 !important; }
+            .app-bar, .side-menu, .side-menu-overlay, .container, .bottom-nav, .no-print, .popup-overlay, #popup-pesan, #popup-tentang { display: none !important; }
+            #popup-struk { display: block !important; position: absolute; top: 0; left: 0; width: 100%; height: auto; background: #fff !important; padding: 0; margin: 0; z-index: 9999999; backdrop-filter: none; }
+            #popup-struk .popup-content { box-shadow: none !important; border: none !important; padding: 0 !important; margin: 0 auto !important; max-width: 58mm !important; border-radius: 0 !important; background: transparent !important;}
+            .struk-container { border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; }
+            .struk-container::before, .struk-container::after { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div id='license-overlay'>
+        <div class='license-box'>
+            <div class='icon-lock'>🔒</div>
+            <h2>Aktivasi Kasir</h2>
+            <p>Masukkan kode lisensi resmi untuk menggunakan sistem Kasir Noura Cell.</p>
+            <input id='input-license' placeholder='KODE LISENSI' type='text'/>
+            <button onclick='verifikasiLisensi()'>Aktivasi Sekarang</button>
+            <div class='license-error' id='license-error'>&#10060; Kode Lisensi Salah atau Tidak Valid!</div>
+        </div>
+    </div>
+
+    <div class='app-bar'>
+        <button class='menu-btn' onclick='toggleMenu()'>&#9776;</button>
+        <h1> DEMO KASIR PRO</h1>
+        <div class='msg-btn-container'>
+            <button class='msg-btn' onclick='bukaKotakMasuk()'>🔔<span class='badge-dot' id='msg-badge'></span></button>
+        </div>
+    </div>
+
+    <div class='side-menu-overlay' id='side-menu-overlay' onclick='toggleMenu()'></div>
+    <div class='side-menu' id='side-menu'>
+        <div class='side-menu-header'>Menu Kasir</div>
+        <button class='side-menu-item' id='nav-riwayat' onclick='switchMenu("riwayat")'>📊 Ringkasan Transaksi</button>
+        <button class='side-menu-item active' id='nav-umum' onclick='switchMenu("umum")'>📝 Penjualan Umum</button>
+        <button class='side-menu-item' id='nav-stok' onclick='switchMenu("stok")'>📦 Penjualan Stok Barang</button>
+        <button class='side-menu-item' id='nav-alquran' onclick='switchMenu("alquran")'>📖 Al-Qur&#39;an Digital</button>
+        <button class='side-menu-item' onclick='bukaTentang()'>ℹ&#65039; Tentang Aplikasi</button>
+        <button class='side-menu-item' onclick='logoutAplikasi()' style='color: #DC2626; border-top: 1px solid var(--border); margin-top: auto;'>🚪 Logout</button>
+    </div>
+
+    <div class='container'>
+        <div class='card card-form' id='card-umum'>
+            <h2>📝 Penjualan Umum</h2>
+            <form id='form-umum' onsubmit='submitData(event, "u")'>
+                <div class='grid-2-cols'>
+                    <div class='form-group'><label>Tanggal</label><input id='date-u' required='required' type='date'/></div>
+                    <div class='form-group'><label>Pelanggan</label><input id='customer-u' placeholder='Umum' type='text' value='Umum'/></div>
+                </div>
+                <div class='form-group'>
+                    <label>Nama Barang / Jasa</label>
+                    <input id='item-u' placeholder='Ketik manual nama barang/jasa...' required='required' type='text'/>
+                </div>
+                <div class='grid-2-cols'>
+                    <div class='form-group'><label>Harga Modal</label><input id='modal-u' required='required' type='number' value='0'/></div>
+                    <div class='form-group'><label>Harga Jual</label><input id='price-u' oninput='hitungTotal("u")' required='required' type='number'/></div>
+                </div>
+                <div class='grid-2-cols'>
+                    <div class='form-group'><label>Qty</label><input id='qty-u' min='1' oninput='hitungTotal("u")' required='required' type='number' value='1'/></div>
+                    <div class='form-group'><label>Status Bayar</label>
+                        <select id='status-u'><option value='Lunas'>&#9989; Lunas</option><option value='Hutang'>&#9203; Hutang</option></select>
+                    </div>
+                </div>
+                <div class='form-group'><label>Total (Rp)</label><input id='total-u' readonly='readonly' type='text' value='0'/></div>
+                <button class='btn-submit' id='btn-save-u' type='submit'>Simpan Transaksi Umum</button>
+            </form>
+        </div>
+
+        <div class='card card-form' id='card-stok' style='display:none;'>
+            <h2>📦 Penjualan Stok</h2>
+            <form id='form-stok' onsubmit='submitData(event, "s")'>
+                <div class='grid-2-cols'>
+                    <div class='form-group'><label>Tanggal</label><input id='date-s' required='required' type='date'/></div>
+                    <div class='form-group'><label>Pelanggan</label><input id='customer-s' placeholder='Umum' type='text' value='Umum'/></div>
+                </div>
+                <div class='form-group'>
+                    <label><span>Pilih Barang Dari Database</span><span class='badge-stok' id='info-stok' style='display:none;'>Stok: 0</span></label>
+                    <select id='item-s' onchange='pilihBarang()' required='required'>
+                        <option disabled='disabled' selected='selected' value=''>Memuat data barang...</option>
+                    </select>
+                </div>
+                <div class='grid-2-cols'>
+                    <div class='form-group'><label>Harga Modal</label><input id='modal-s' required='required' type='number' value='0'/></div>
+                    <div class='form-group'><label>Harga Jual</label><input id='price-s' oninput='hitungTotal("s")' required='required' type='number'/></div>
+                </div>
+                <div class='grid-2-cols'>
+                    <div class='form-group'><label>Qty</label><input id='qty-s' min='1' oninput='hitungTotal("s")' required='required' type='number' value='1'/></div>
+                    <div class='form-group'><label>Status Bayar</label>
+                        <select id='status-s'><option value='Lunas'>&#9989; Lunas</option><option value='Hutang'>&#9203; Hutang</option></select>
+                    </div>
+                </div>
+                <div class='form-group'><label>Total (Rp)</label><input id='total-s' readonly='readonly' type='text' value='0'/></div>
+                <button class='btn-submit' id='btn-save-s' type='submit'>Simpan &amp; Potong Stok</button>
+            </form>
+        </div>
+        
+        <div class='card card-table' id='card-riwayat' style='display:none;'>
+            <h2><span>Riwayat Transaksi</span><button class='btn-refresh' onclick='loadRiwayatKasir()'>🔄 Refresh</button></h2>
+            <div class='info-total'><span>Total Penjualan Keseluruhan</span><span id='total-penjualan-text'>Rp 0</span></div>
+            <div class='table-responsive'>
+                <table>
+                    <thead><tr><th>Pelanggan</th><th>Barang</th><th>Total Harga</th><th>Harga Jual</th><th>Laba Bersih</th><th>Status</th></tr></thead>
+                    <tbody id='table-body-kasir'><tr><td colspan='6' style='text-align: center; padding: 30px;'>Memuat data...</td></tr></tbody>
+                </table>
+            </div>
+            <button id='btn-selengkapnya' onclick='toggleRiwayat()' style='display: none; width: 100%; margin-top: 16px; padding: 14px; background-color: #F1F5F9; border: none; color: #4F46E5; border-radius: 100px; font-size: 13px; font-weight: 600; cursor: pointer;'>Lihat Selengkapnya</button>
+        </div>
+
+        <div class='card card-table' id='card-alquran' style='display:none; max-width:800px; margin: 0 auto;'>
+            <h2><span>📖 Al-Qur&#39;an Digital Lengkap</span></h2>
+            
+            <div id='quran-main-view'>
+                <input class='quran-search' id='search-surah' oninput='filterSurah()' placeholder='🔍 Cari nama surah (contoh: Al-Fatihah)...' type='text'/>
+                <div class='surah-list' id='surah-list-container'>
+                    <div class='quran-loading'>Memuat daftar surah...</div>
+                </div>
+            </div>
+
+            <div id='quran-detail-view' style='display:none;'>
+                <button class='btn-back-quran' onclick='kembaliKeDaftarSurah()'>&#11013;&#65039; Kembali ke Daftar Surah</button>
+                <div id='surah-header-info' style='text-align: center; background: linear-gradient(135deg, #EEF2FF, #E0E7FF); padding: 20px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);'>
+                    <h3 id='txt-detail-nama' style='color: var(--primary); font-size: 22px; font-weight:700;'>Surah</h3>
+                    <p id='txt-detail-sub' style='font-size: 13px; color: var(--text-muted); margin-top: 4px;'>Info Surah</p>
+                </div>
+                <div class='ayah-list-box' id='ayah-list-container'>
+                    <div class='quran-loading'>Memuat ayat...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class='bottom-nav'>
+        <button class='bottom-nav-item active' id='bot-umum' onclick='switchMenu("umum")'>
+            <span class='icon'>📝</span><span>Umum</span>
+        </button>
+        <button class='bottom-nav-item' id='bot-stok' onclick='switchMenu("stok")'>
+            <span class='icon'>📦</span><span>Stok</span>
+        </button>
+        <button class='bottom-nav-item' id='bot-riwayat' onclick='switchMenu("riwayat")'>
+            <span class='icon'>📊</span><span>Riwayat</span>
+        </button>
+    </div>
+
+    <div class='popup-overlay' id='popup-pesan'>
+        <div class='popup-content'>
+            <h3><span style='background: #FEF3C7; padding: 8px; border-radius: 12px; display: inline-flex; color: #D97706;'>💬</span> Kotak Masuk</h3>
+            
+            <div style='background: linear-gradient(135deg, #FFFBEB, #FEF3C7); border: 1px solid #FDE68A; padding: 20px; border-radius: 16px; margin-bottom: 20px; text-align: left; box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.1); position: relative;'>
+                <span style='position: absolute; top: -10px; left: 16px; background: #F59E0B; color: white; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 100px; box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);'>PESAN TERBARU</span>
+                <p id='teks-popup-pesan' style='margin-bottom: 0; margin-top: 4px; color: #92400E; font-size: 14px; font-weight: 600; line-height: 1.5;'></p>
+            </div>
+            
+            <div style='text-align: left; margin-bottom: 16px;'>
+                <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;'>
+                    <strong style='font-size: 12px; color: var(--text-muted);'>Riwayat Chat:</strong>
+                    <button onclick='hapusRiwayatPesan()' style='background: #FEF2F2; border: 1px solid #FECACA; color: #DC2626; font-size: 11px; font-weight: 600; cursor: pointer; padding: 4px 10px; border-radius: 100px; transition: all 0.2s;'>🗑&#65039; Bersihkan</button>
+                </div>
+                <div id='riwayat-pesan-container' style='max-height: 140px; overflow-y: auto; background: #F8FAFC; border: 1px solid #E2E8F0; padding: 12px; border-radius: 16px; font-size: 12px; display: flex; flex-direction: column; gap: 8px; box-sizing: border-box; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);'>
+                    <div style='color: #64748B; text-align: center; padding: 10px 0;'>Tidak ada riwayat pesan.</div>
+                </div>
+            </div>
+            
+            <div style='text-align: left; margin-bottom: 12px; background: #ffffff; padding: 16px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);'>
+                <strong style='font-size: 12px; color: var(--text-dark); display: block; margin-bottom: 8px;'>Balas ke Admin:</strong>
+                <textarea id='input-balasan' onblur='this.style.borderColor="#E2E8F0"; this.style.background="#F8FAFC";' onfocus='this.style.borderColor="var(--primary)"; this.style.background="#fff";' placeholder='Ketik pesan balasan Anda di sini...' rows='2' style='width: 100%; padding: 12px; border: 2px solid #E2E8F0; background: #F8FAFC; border-radius: 12px; font-size: 13px; resize: none; box-sizing: border-box; font-family: inherit; outline: none; transition: all 0.2s;'></textarea>
+                <button id='btn-kirim-balasan' onclick='kirimBalasanAdmin()' style='background: linear-gradient(135deg, var(--primary), #6366F1); color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: 600; font-size: 13px; margin-top: 10px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);'>Kirim Balasan</button>
+            </div>
+            
+            <button class='btn-tutup-popup' onclick='tutupPopupPesan()'>Tutup Kotak Masuk</button>
+        </div>
+    </div>
+    
+    <div class='popup-overlay' id='popup-tentang'>
+        <div class='popup-content'>
+            <h3><span style='background: #EEF2FF; padding: 8px; border-radius: 12px; display: inline-flex; color: var(--primary);'>ℹ&#65039;</span> Tentang Aplikasi</h3>
+            
+            <div style='background: #F8FAFC; border: 1px solid #E2E8F0; padding: 24px 20px; border-radius: 20px; text-align: center; font-size: 14px; color: #475569; margin-bottom: 24px; line-height: 1.8; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);'>
+                <div style='width: 68px; height: 68px; background: linear-gradient(135deg, var(--primary), #818CF8); color: white; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 800; margin: 0 auto 16px; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);'>KP</div>
+                <strong style='font-size: 18px; color: var(--text-dark); display: block; margin-bottom: 6px;'>Kasir Pro</strong>
+                <span style='background: #E0E7FF; color: var(--primary); font-size: 11px; padding: 4px 12px; border-radius: 100px; font-weight: 700; display: inline-block;'>Versi 1.0</span>
+                
+                <hr style='border: none; border-top: 1px dashed #CBD5E1; margin: 20px 0;'/>
+                
+                <span style='font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;'>Sistem Kasir Khusus Developer:</span>
+                <strong style='color: #0F172A; font-size: 15px;'>FA DIGITAL STUDIO<br/><span style='font-size: 13px; color: var(--primary);'>( FARID ARIS )</span></strong>
+            </div>
+            
+            <button class='btn-tutup-popup' onclick='tutupTentang()'>Kembali</button>
+        </div>
+    </div>
+
+    <div class='popup-overlay' id='popup-struk'>
+        <div class='popup-content' style='max-width: 340px;'>
+            <div class='struk-container' id='struk-print'>
+                <div style='text-align: left; color: #1E293B; font-family: "Courier New", Courier, monospace; font-size: 13px; line-height: 1.5;'>
+                    <div style='text-align: center; margin-bottom: 12px;'>
+                        <strong style='font-size: 18px; color: #0F172A;'>NOURA CELL</strong><br/>
+                        <span style='font-size: 11px; color: #64748B;'>Sistem Penjualan Kasir</span>
+                    </div>
+                    <div style='border-top: 1px dashed #94A3B8; margin: 10px 0;'></div>
+                    <table style='width: 100%; border-collapse: collapse; margin-bottom: 8px;'>
+                        <tr><td style='width: 35%; padding-bottom: 4px;'>ID Nota</td><td style='padding-bottom: 4px;'>: <span id='stk-id'></span></td></tr>
+                        <tr><td style='padding-bottom: 4px;'>Tanggal</td><td style='padding-bottom: 4px;'>: <span id='stk-tgl'></span></td></tr>
+                        <tr><td style='padding-bottom: 4px;'>Pelanggan</td><td style='padding-bottom: 4px;'>: <span id='stk-plg'></span></td></tr>
+                        <tr><td style='padding-bottom: 4px;'>Status</td><td style='padding-bottom: 4px;'>: <strong id='stk-status'></strong></td></tr>
+                    </table>
+                    <div style='border-top: 1px dashed #94A3B8; margin: 10px 0;'></div>
+                    <div style='margin: 12px 0;'>
+                        <div id='stk-barang' style='font-weight: bold; font-size: 14px; margin-bottom: 4px;'></div>
+                        <div style='display: flex; justify-content: space-between;'>
+                            <span id='stk-qty-harga'>0 x 0</span>
+                            <span style='font-weight: 600;'>Rp <span id='stk-total'>0</span></span>
+                        </div>
+                    </div>
+                    <div style='border-top: 1px dashed #94A3B8; margin: 12px 0; border-bottom: 1px dashed #94A3B8; padding: 8px 0; display: flex; justify-content: space-between; font-weight: bold; font-size: 14px;'>
+                        <span>TOTAL</span>
+                        <span>Rp <span id='stk-grand-total'>0</span></span>
+                    </div>
+                    <div style='text-align: center; font-size: 11px; margin-top: 16px; color: #64748B; font-style: italic;'>
+                        ~ Terima Kasih Atas Kunjungan Anda ~
+                    </div>
+                </div>
+            </div>
+            
+            <div class='struk-actions no-print'>
+                <button class='btn-print' onclick='cetakStruk()'>🖨&#65039; Cetak</button>
+                <button class='btn-close-struk' onclick='tutupStruk()'>Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <div class='popup-overlay' id='popup-custom-alert' style='z-index: 2000000; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);'>
+        <div class='popup-content' style='max-width: 360px; padding: 32px 24px; border-radius: 28px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);'>
+            <div id='custom-alert-icon' style='width: 72px; height: 72px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); transition: all 0.3s;'>&#9888;&#65039;</div>
+            <h3 id='custom-alert-title' style='font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px;'>Peringatan</h3>
+            <p id='custom-alert-message' style='font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 26px; padding: 0 8px; text-align: center;'></p>
+            <div id='custom-alert-actions' style='display: flex; gap: 12px; justify-content: center;'>
+                <button class='btn-tutup-popup' id='custom-alert-cancel' style='margin-top: 0; flex: 1; border-radius: 14px; padding: 14px; font-weight: 600; display: none;'>Batal</button>
+                <button class='btn-submit' id='custom-alert-confirm' style='margin-top: 0; flex: 1; border-radius: 14px; padding: 14px; font-weight: 700; color: white; box-shadow: 0 8px 16px rgba(0,0,0,0.15); border: none;'>OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script type='text/javascript'>
+        //<![CDATA[
+
+// ===================================================================
+// 1. KUNCI DOMAIN (PENTING! GANTI DENGAN ALAMAT BLOG ANDA)
+const domainResmi = "demokasirpulsa.blogspot.com"; // <-- UBAH INI
+
+if (window.location.hostname !== domainResmi && window.location.hostname !== "localhost" && window.location.hostname !== "") {
+    document.body.innerHTML = "<h1 style='text-align:center; margin-top:50px; color:red; font-family:sans-serif;'>Aplikasi ini bajakan/tidak memiliki lisensi resmi.</h1>";
+    
+}
+
+// 2. MEMATIKAN KLIK KANAN & SHORTCUT KEYBOARD
+document.addEventListener('contextmenu', event => event.preventDefault());
+document.onkeydown = function(e) {
+    if(e.keyCode == 123) { return false; } // Cegah F12
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } // Cegah Ctrl+Shift+I
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; } // Cegah Ctrl+Shift+C
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; } // Cegah Ctrl+Shift+J
+    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; } // Cegah Ctrl+U (View Source)
+    if(e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { return false; } // Cegah Ctrl+S (Save)
+    if(e.ctrlKey && e.keyCode == 'P'.charCodeAt(0)) { return false; } // Cegah Ctrl+P (Print)
+};
+// ===================================================================
+
+// PENGATURAN KODE LISENSI
+const KODE_LISENSI_VALID = "ADMIN"; 
+
+const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyNjVAVAtpS3JTzDb5oAnRTPyMIYNB1K8HO94N1NYhizwRNTcUS0TxRXYYpRcHIsLLu/exec'; 
+
+let isRiwayatExpanded = false; 
+let lastPesan = ""; 
+let wakeLockPenahanLayar = null; 
+let daftarStok = [];
+
+// SYSTEM ENGINE CORE POPUP PREMIUM (ALERT & CONFIRM)
+function bukaCustomAlert(title, message, type = 'warning', callback = null) {
+    const overlay = document.getElementById('popup-custom-alert');
+    const iconEl = document.getElementById('custom-alert-icon');
+    const titleEl = document.getElementById('custom-alert-title');
+    const msgEl = document.getElementById('custom-alert-message');
+    const confirmBtn = document.getElementById('custom-alert-confirm');
+    const cancelBtn = document.getElementById('custom-alert-cancel');
+    
+    titleEl.innerText = title;
+    msgEl.innerText = message;
+    cancelBtn.style.display = 'none';
+    confirmBtn.innerText = 'OK';
+    
+    if(type === 'success') {
+        iconEl.innerHTML = '✅';
+        iconEl.style.background = '#ECFDF5';
+        iconEl.style.color = '#10B981';
+        confirmBtn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
+    } else if(type === 'danger') {
+        iconEl.innerHTML = '🚨';
+        iconEl.style.background = '#FEF2F2';
+        iconEl.style.color = '#EF4444';
+        confirmBtn.style.background = 'linear-gradient(135deg, #EF4444, #DC2626)';
+    } else {
+        iconEl.innerHTML = '⚠️';
+        iconEl.style.background = '#FFFBEB';
+        iconEl.style.color = '#F59E0B';
+        confirmBtn.style.background = 'linear-gradient(135deg, var(--primary), #6366F1)';
+    }
+    
+    confirmBtn.onclick = function() {
+        overlay.style.display = 'none';
+        if(callback) callback();
+    };
+    overlay.style.display = 'flex';
+}
+
+function bukaCustomConfirm(title, message, type = 'danger', callback = null) {
+    const overlay = document.getElementById('popup-custom-alert');
+    const iconEl = document.getElementById('custom-alert-icon');
+    const titleEl = document.getElementById('custom-alert-title');
+    const msgEl = document.getElementById('custom-alert-message');
+    const confirmBtn = document.getElementById('custom-alert-confirm');
+    const cancelBtn = document.getElementById('custom-alert-cancel');
+    
+    titleEl.innerText = title;
+    msgEl.innerText = message;
+    cancelBtn.style.display = 'block';
+    
+    if(type === 'danger') {
+        iconEl.innerHTML = title.toLowerCase().includes('logout') ? '🚪' : '🗑️';
+        iconEl.style.background = '#FEF2F2';
+        iconEl.style.color = '#EF4444';
+        confirmBtn.style.background = 'linear-gradient(135deg, #EF4444, #DC2626)';
+        confirmBtn.innerText = title.toLowerCase().includes('logout') ? 'Logout' : 'Hapus';
+    } else {
+        iconEl.innerHTML = '❓';
+        iconEl.style.background = '#EEF2FF';
+        iconEl.style.color = 'var(--primary)';
+        confirmBtn.style.background = 'linear-gradient(135deg, var(--primary), #6366F1)';
+        confirmBtn.innerText = 'Lanjutkan';
+    }
+    
+    confirmBtn.onclick = function() {
+        overlay.style.display = 'none';
+        if(callback) callback();
+    };
+    cancelBtn.onclick = function() {
+        overlay.style.display = 'none';
+    };
+    overlay.style.display = 'flex';
+}
+
+// FUNGSI CEK LISENSI SAAT APLIKASI DIBUKA
+function cekStatusLisensi() {
+    const savedKey = localStorage.getItem("noura_kasir_license");
+    if (savedKey === KODE_LISENSI_VALID) {
+        document.getElementById('license-overlay').style.display = 'none';
+        inisialisasiAplikasi();
+    }
+}
+
+// FUNGSI SAAT TOMBOL AKTIVASI DITEKAN
+function verifikasiLisensi() {
+    const inputKey = document.getElementById('input-license').value.trim().toUpperCase();
+    if (inputKey === KODE_LISENSI_VALID) {
+        localStorage.setItem("noura_kasir_license", KODE_LISENSI_VALID);
+        document.getElementById('license-overlay').style.display = 'none';
+        document.getElementById('license-error').style.display = 'none';
+        bukaCustomAlert("Sukses", "Lisensi Berhasil Diaktifkan!", "success", function() {
+            inisialisasiAplikasi();
+        });
+    } else {
+        document.getElementById('license-error').style.display = 'block';
+    }
+}
+
+// FUNGSI MEMUAT DATA UTAMA (Hanya berjalan jika lisensi valid)
+function inisialisasiAplikasi() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('date-u').value = today;
+    document.getElementById('date-s').value = today;
+    loadStok(); 
+    loadRiwayatKasir(); 
+    cekPesan(); 
+    aktifkanPenahanLayar(); 
+    setInterval(cekPesan, 5000); 
+}
+
+window.onload = () => { 
+    cekStatusLisensi(); 
+};
+
+function switchMenu(menu) {
+    document.getElementById('card-umum').style.display = 'none';
+    document.getElementById('card-stok').style.display = 'none';
+    document.getElementById('card-riwayat').style.display = 'none';
+    if(document.getElementById('card-alquran')) document.getElementById('card-alquran').style.display = 'none';
+    
+    document.getElementById('nav-umum').classList.remove('active');
+    document.getElementById('nav-stok').classList.remove('active');
+    document.getElementById('nav-riwayat').classList.remove('active');
+    if(document.getElementById('nav-alquran')) document.getElementById('nav-alquran').classList.remove('active');
+    
+    if(document.getElementById('bot-umum')) document.getElementById('bot-umum').classList.remove('active');
+    if(document.getElementById('bot-stok')) document.getElementById('bot-stok').classList.remove('active');
+    if(document.getElementById('bot-riwayat')) document.getElementById('bot-riwayat').classList.remove('active');
+    
+    document.getElementById('card-' + menu).style.display = 'block';
+    document.getElementById('nav-' + menu).classList.add('active');
+    if(document.getElementById('bot-' + menu)) document.getElementById('bot-' + menu).classList.add('active');
+    
+    if(menu === 'riwayat') { loadRiwayatKasir(); }
+    if(menu === 'alquran') { panggilEngineAlquran(); }
+    if (document.getElementById('side-menu').classList.contains('open')) { toggleMenu(); }
+}
+
+function loadStok() {
+    const dropdown = document.getElementById('item-s');
+    fetch(googleScriptUrl + "?action=get_stok").then(res => res.json()).then(data => {
+        daftarStok = data; 
+        dropdown.innerHTML = '<option value="" disabled selected>-- Pilih Nama Barang --</option>';
+        if(!data || data.length === 0) { dropdown.innerHTML = '<option value="" disabled>Stok kosong di Admin</option>'; return; }
+        data.forEach(item => { 
+            let namaItem = item.nama || item.item || item.nama_barang || item.Nama || item.barang;
+            if(namaItem && namaItem.trim() !== "") {
+                const option = document.createElement('option'); option.value = namaItem; option.text = namaItem; dropdown.appendChild(option); 
+            }
+        });
+    }).catch(e => { dropdown.innerHTML = '<option value="" disabled>Gagal memuat stok</option>'; });
+}
+
+function pilihBarang() {
+    const namaBarang = document.getElementById('item-s').value; 
+    const itemTerpilih = daftarStok.find(b => (b.nama || b.item || b.nama_barang || b.Nama || b.barang) === namaBarang); 
+    const infoStok = document.getElementById('info-stok');
+    
+    if(itemTerpilih) {
+        document.getElementById('modal-s').value = itemTerpilih.modal || itemTerpilih.harga_modal || 0; 
+        document.getElementById('price-s').value = itemTerpilih.jual || itemTerpilih.price || itemTerpilih.harga_jual || itemTerpilih.harga || 0; 
+        document.getElementById('qty-s').value = 1;
+        infoStok.style.display = 'block'; 
+        let sisa = parseFloat(itemTerpilih.jumlah || itemTerpilih.stok || itemTerpilih.stock || itemTerpilih.sisa || 0) || 0; 
+        infoStok.innerText = 'Sisa Stok: ' + sisa;
+        if (sisa <= 0) { infoStok.style.color = '#991B1B'; infoStok.style.background = '#FEE2E2'; } else { infoStok.style.color = '#065F46'; infoStok.style.background = '#D1FAE5'; }
+        hitungTotal("s");
+    }
+}
+
+// Dialog-dialog kontrol menu tetap berjalan murni sesuai logika lama Anda
+function toggleMenu() { document.getElementById('side-menu').classList.toggle('open'); document.getElementById('side-menu-overlay').style.display = document.getElementById('side-menu').classList.contains('open') ? 'block' : 'none'; }
+function bukaTentang() { toggleMenu(); document.getElementById('popup-tentang').style.display = 'flex'; }
+function tutupTentang() { document.getElementById('popup-tentang').style.display = 'none'; }
+function tutupPopupPesan() { document.getElementById('popup-pesan').style.display = 'none'; }
+
+function bukaKotakMasuk() {
+    document.getElementById('msg-badge').style.display = 'none';
+    tampilkanRiwayatPesan();
+    document.getElementById('popup-pesan').style.display = 'flex';
+}
+
+function cekPesan() { 
+    fetch(googleScriptUrl + "?action=get_pesan").then(res => res.json()).then(data => { 
+        if(data && data.pesan && data.pesan.trim() !== "") { 
+            document.getElementById('teks-popup-pesan').innerText = data.pesan; 
+            if(data.pesan !== lastPesan) { 
+                lastPesan = data.pesan; 
+                document.getElementById('msg-badge').style.display = 'block'; 
+                document.getElementById('popup-pesan').style.display = 'flex'; 
+                tambahKeRiwayat("Admin: " + data.pesan);
+            } 
+        } else { 
+            lastPesan = ""; 
+            document.getElementById('teks-popup-pesan').innerText = "Belum ada pesan dari admin saat ini.";
+            document.getElementById('msg-badge').style.display = 'none'; 
+        } 
+    }).catch(e => console.log("Cek pesan diskip.")); 
+}
+
+function hitungTotal(tipe) { 
+    const hrg = parseFloat(document.getElementById('price-' + tipe).value) || 0;
+    const qty = parseFloat(document.getElementById('qty-' + tipe).value) || 0;
+    document.getElementById('total-' + tipe).value = (hrg * qty).toLocaleString('id-ID'); 
+}
+
+function loadRiwayatKasir() {
+    const tbody = document.getElementById('table-body-kasir');
+    fetch(googleScriptUrl).then(res => res.json()).then(data => {
+        if (!data || data.error || data.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">Belum ada data</td></tr>'; return; }
+        tbody.innerHTML = ''; let grandTotal = 0; 
+        const validData = data.filter(trx => { let namaItem = trx.item || trx.nama_barang || trx.barang; return namaItem && String(namaItem).trim() !== ""; });
+        if (validData.length === 0) { tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">Belum ada data valid</td></tr>'; return; }
+        validData.forEach(trx => { grandTotal += parseFloat(trx.total || 0); });
+        document.getElementById('total-penjualan-text').innerText = 'Rp ' + grandTotal.toLocaleString('id-ID');
+        const btnSelengkapnya = document.getElementById('btn-selengkapnya'); isRiwayatExpanded = false; btnSelengkapnya.innerText = 'Lihat Selengkapnya';
+        const reversedData = validData.reverse(); 
+        if (reversedData.length > 5) { btnSelengkapnya.style.display = 'block'; } else { btnSelengkapnya.style.display = 'none'; }
+        reversedData.forEach((trx, index) => {
+            let statusBadge = trx.status === 'Hutang' ? '<span class="badge-hutang">Hutang</span>' : '<span class="badge-lunas">Lunas</span>'; 
+            let namaPlg = trx.customer || trx.pelanggan || 'Umum'; let namaBrg = trx.item || trx.nama_barang || trx.barang || 'Item Tidak Diketahui';
+            let qty = trx.qty || trx.jumlah || 0; let total = parseFloat(trx.total || 0); let hrgJual = parseFloat(trx.price || trx.harga_jual || 0); let laba = parseFloat(trx.profit || trx.laba || 0);
+            const tr = document.createElement('tr'); if (index >= 5) { tr.className = 'baris-tersembunyi'; tr.style.display = 'none'; }
+            
+            tr.style.cursor = 'pointer';
+            tr.onclick = () => bukaStruk(trx);
+            
+            tr.innerHTML = `<td><strong>${namaPlg}</strong></td><td>${namaBrg} (x${qty})</td><td>${total.toLocaleString('id-ID')}</td><td>${hrgJual.toLocaleString('id-ID')}</td><td>${laba.toLocaleString('id-ID')}</td><td>${statusBadge}</td>`; 
+            tbody.appendChild(tr);
+        });
+    });
+}
+
+function toggleRiwayat() { 
+    isRiwayatExpanded = !isRiwayatExpanded; 
+    document.querySelectorAll('.baris-tersembunyi').forEach(row => { row.style.display = isRiwayatExpanded ? (window.innerWidth > 768 ? 'table-row' : 'grid') : 'none'; }); 
+    document.getElementById('btn-selengkapnya').innerText = isRiwayatExpanded ? 'Tutup Sebagian' : 'Lihat Selengkapnya'; 
+}
+
+function submitData(e, tipe) {
+    e.preventDefault();
+    let namaBarang = ""; let qty = parseFloat(document.getElementById('qty-' + tipe).value) || 0;
+    if(tipe === 's') {
+        namaBarang = document.getElementById('item-s').value; 
+        if(!namaBarang) { bukaCustomAlert("Pilih Barang", "Silakan pilih produk dari database stok terlebih dahulu!", "warning"); return; }
+        const itemTerpilih = daftarStok.find(b => (b.nama || b.item || b.nama_barang || b.barang) === namaBarang);
+        let stokTersedia = parseFloat(itemTerpilih.jumlah || itemTerpilih.stok || itemTerpilih.stock || itemTerpilih.sisa || 0) || 0;
+        if(itemTerpilih && qty > stokTersedia) { bukaCustomAlert("Stok Tidak Cukup", `Gagal memproses! Sisa persediaan untuk ${namaBarang} hanya tinggal ${stokTersedia} unit.`, "warning"); return; }
+    } else {
+        namaBarang = document.getElementById('item-u').value; if(!namaBarang) { bukaCustomAlert("Input Kosong", "Kolom nama barang atau jenis jasa wajib diisi!", "warning"); return; }
+    }
+    const btnSave = document.getElementById('btn-save-' + tipe); btnSave.disabled = true; btnSave.innerText = 'Menyimpan...';
+    const price = parseFloat(document.getElementById('price-' + tipe).value) || 0; const modal = parseFloat(document.getElementById('modal-' + tipe).value) || 0; const nama = document.getElementById('customer-' + tipe).value || 'Umum';
+    const payload = { id: 'TRX-' + Math.floor(1000 + Math.random() * 9000), date: document.getElementById('date-' + tipe).value, customer: nama, item: namaBarang, qty: qty, modal: modal, price: price, total: (price * qty), profit: ((price - modal) * qty), status: document.getElementById('status-' + tipe).value };
+    fetch(googleScriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).then(() => { 
+        loadRiwayatKasir(); if(tipe === 's') loadStok(); resetForm(tipe); btnSave.innerText = '✅ Berhasil!'; 
+        bukaCustomAlert("Sukses", "Transaksi Berhasil Disimpan ke Sistem!", "success");
+        setTimeout(() => { btnSave.disabled = false; btnSave.innerText = 'Simpan Data'; }, 1500); 
+    }).catch(e => { btnSave.innerText = 'Gagal'; setTimeout(() => { btnSave.disabled = false; btnSave.innerText = 'Simpan Data'; }, 1500); });
+}
+
+function resetForm(tipe) { 
+    if(tipe === 's') { document.getElementById('item-s').selectedIndex = 0; document.getElementById('info-stok').style.display = 'none'; } else { document.getElementById('item-u').value = ''; }
+    document.getElementById('price-' + tipe).value = ''; document.getElementById('modal-' + tipe).value = '0'; document.getElementById('qty-' + tipe).value = '1'; document.getElementById('total-' + tipe).value = '0'; document.getElementById('customer-' + tipe).value = 'Umum'; document.getElementById('status-' + tipe).value = 'Lunas'; document.getElementById('customer-' + tipe).focus();
+}
+
+async function aktifkanPenahanLayar() { if ('wakeLock' in navigator) { try { wakeLockPenahanLayar = await navigator.wakeLock.request('screen'); } catch (err) {} } }
+document.addEventListener('visibilitychange', async () => { if (wakeLockPenahanLayar !== null && document.visibilityState === 'visible') { aktifkanPenahanLayar(); } });
+
+function tambahKeRiwayat(pesan) {
+    let riwayat = JSON.parse(localStorage.getItem("noura_riwayat_pesan")) || [];
+    if (riwayat.length === 0 || riwayat[0].teks !== pesan) {
+        let waktu = new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+        let tanggal = new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'short'});
+        riwayat.unshift({ teks: pesan, waktu: tanggal + " " + waktu });
+        if (riwayat.length > 30) riwayat.pop(); 
+        localStorage.setItem("noura_riwayat_pesan", JSON.stringify(riwayat));
+        tampilkanRiwayatPesan();
+    }
+}
+
+function tampilkanRiwayatPesan() {
+    const container = document.getElementById('riwayat-pesan-container');
+    if (!container) return;
+    let riwayat = JSON.parse(localStorage.getItem("noura_riwayat_pesan")) || [];
+    if (riwayat.length === 0) {
+        container.innerHTML = '<div style="color: #64748B; text-align: center; padding: 10px 0;">Tidak ada riwayat pesan.</div>';
+        return;
+    }
+    container.innerHTML = riwayat.map(p => {
+        let colorText = p.teks.startsWith("Anda") ? "#4F46E5" : "#0F172A"; 
+        return `
+        <div style="border-bottom: 1px dashed #E2E8F0; padding-bottom: 6px; margin-bottom: 2px; text-align: left;">
+            <span style="font-size: 10px; color: #64748B; display: block; font-weight: 500;">📅 ${p.waktu}</span>
+            <span style="color: ${colorText}; font-size: 12px; line-height: 1.4; display: block; white-space: pre-line; font-weight: ${p.teks.startsWith("Anda") ? "600" : "normal"};">${p.teks}</span>
+        </div>
+    `}).join('');
+}
+
+function deleteMessageHistory() {} // Backup handle safely empty placeholder
+function hapusRiwayatPesan() {
+    bukaCustomConfirm("Hapus Riwayat", "Apakah Anda yakin ingin menghapus seluruh riwayat chat masuk? Tindakan ini tidak dapat dibatalkan.", "danger", function() {
+        localStorage.removeItem("noura_riwayat_pesan");
+        tampilkanRiwayatPesan();
+    });
+}
+
+function kirimBalasanAdmin() {
+    const teksInput = document.getElementById('input-balasan');
+    const btnKirim = document.getElementById('btn-kirim-balasan');
+    const teks = teksInput.value.trim();
+
+    if (!teks) {
+        bukaCustomAlert("Pesan Kosong", "Gagal mengirim! Isi balasan tidak boleh kosong.", "warning");
+        return;
+    }
+
+    btnKirim.disabled = true;
+    btnKirim.innerText = 'Mengirim...';
+
+    const payload = {
+        action: 'send_message_kasir', 
+        pesan: teks,
+        tanggal: new Date().toLocaleString('id-ID') 
+    };
+
+    fetch(googleScriptUrl, { 
+        method: 'POST', 
+        mode: 'no-cors', 
+        body: JSON.stringify(payload) 
+    }).then(() => { 
+        tambahKeRiwayat("Anda: " + teks); 
+        teksInput.value = ''; 
+        btnKirim.innerText = '✅ Terkirim!'; 
+        setTimeout(() => { 
+            btnKirim.disabled = false; 
+            btnKirim.innerText = 'Kirim Balasan'; 
+        }, 2000); 
+    }).catch(e => { 
+        btnKirim.innerText = '❌ Gagal'; 
+        setTimeout(() => { 
+            btnKirim.disabled = false; 
+            btnKirim.innerText = 'Kirim Balasan'; 
+        }, 2000); 
+    });
+}
+
+function bukaStruk(trx) {
+    let namaPlg = trx.customer || trx.pelanggan || 'Umum';
+    let namaBrg = trx.item || trx.nama_barang || trx.barang || 'Item Tidak Diketahui';
+    let qty = trx.qty || trx.jumlah || 0;
+    let total = parseFloat(trx.total || 0);
+    let hrgJual = parseFloat(trx.price || trx.harga_jual || 0);
+    let tgl = trx.date || '';
+    let idNota = trx.id || 'TRX-' + Math.floor(1000 + Math.random() * 9000);
+    let status = trx.status || 'Lunas';
+
+    document.getElementById('stk-id').innerText = idNota;
+    document.getElementById('stk-tgl').innerText = tgl;
+    document.getElementById('stk-plg').innerText = namaPlg;
+    document.getElementById('stk-status').innerText = status;
+    document.getElementById('stk-barang').innerText = namaBrg;
+    document.getElementById('stk-qty-harga').innerText = qty + ' x ' + hrgJual.toLocaleString('id-ID');
+    document.getElementById('stk-total').innerText = total.toLocaleString('id-ID');
+    document.getElementById('stk-grand-total').innerText = total.toLocaleString('id-ID');
+
+    document.getElementById('popup-struk').style.display = 'flex';
+}
+
+function tutupStruk() {
+    document.getElementById('popup-struk').style.display = 'none';
+}
+
+function cetakStruk() {
+    window.print();
+}
+
+// Fungsi Sesi Logout Premium (Telah Diperbaharui)
+function logoutAplikasi() {
+    bukaCustomConfirm("Konfirmasi Logout", "Apakah Anda yakin ingin keluar dari sistem? Anda harus memasukkan kembali kode lisensi resmi untuk login.", "danger", function() {
+        localStorage.removeItem("noura_kasir_license");
+        window.location.reload();
+    });
+}
+
+// ===================================================================
+// ARTIFAK CORE ENGINE CODE - MODUL AL-QUR'AN DIGITAL LENGKAP
+// ===================================================================
+let cacheSurahQuran = [];
+
+function panggilEngineAlquran() {
+    if (cacheSurahQuran.length === 0) {
+        unduhDaftarSurah();
+    } else {
+        kembaliKeDaftarSurah();
+    }
+}
+
+function unduhDaftarSurah() {
+    const boxSurah = document.getElementById('surah-list-container');
+    boxSurah.innerHTML = '<div class="quran-loading">🔄 Menghubungkan ke server Al-Qur\'an...</div>';
+    
+    fetch('https://equran.id/api/v2/surat')
+        .then(res => res.json())
+        .then(resData => {
+            if (resData && resData.code === 200) {
+                cacheSurahQuran = resData.data;
+                tampilkanDaftarSurah(cacheSurahQuran);
+            } else {
+                boxSurah.innerHTML = '<div class="quran-loading" style="color:#DC2626;">⚠️ Gagal memuat data index Al-Qur\'an.</div>';
+            }
+        })
+        .catch(err => {
+            boxSurah.innerHTML = '<div class="quran-loading" style="color:#DC2626;">⚠️ Gagal memuat Al-Qur\'an. Pastikan perangkat Anda terhubung ke Internet.</div>';
+        });
+}
+
+function tampilkanDaftarSurah(listData) {
+    const boxSurah = document.getElementById('surah-list-container');
+    boxSurah.innerHTML = '';
+    
+    if (listData.length === 0) {
+        boxSurah.innerHTML = '<div class="quran-loading">Surah tidak ditemukan. Coba keyword lain.</div>';
+        return;
+    }
+    
+    listData.forEach(item => {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'surah-item';
+        itemEl.onclick = () => bukaAyatSurah(item.nomor);
+        itemEl.innerHTML = `
+            <div class="surah-meta">
+                <div class="surah-num">${item.nomor}</div>
+                <div>
+                    <div class="surah-title-id">${item.namaLatin}</div>
+                    <div class="surah-subtitle">${item.arti} • ${item.jumlahAyat} Ayat</div>
+                </div>
+            </div>
+            <div class="surah-title-ar">${item.nama}</div>
+        `;
+        boxSurah.appendChild(itemEl);
+    });
+}
+
+function filterSurah() {
+    const keyword = document.getElementById('search-surah').value.toLowerCase();
+    const filtered = cacheSurahQuran.filter(s => 
+        s.namaLatin.toLowerCase().includes(keyword) || 
+        s.arti.toLowerCase().includes(keyword)
+    );
+    tampilkanDaftarSurah(filtered);
+}
+
+function bukaAyatSurah(nomorSurah) {
+    const mainView = document.getElementById('quran-main-view');
+    const detailView = document.getElementById('quran-detail-view');
+    const txtNama = document.getElementById('txt-detail-nama');
+    const txtSub = document.getElementById('txt-detail-sub');
+    const boxAyat = document.getElementById('ayah-list-container');
+    
+    mainView.style.display = 'none';
+    detailView.style.display = 'block';
+    boxAyat.innerHTML = '<div class="quran-loading">⏳ Mengunduh ayat-ayat Al-Qur\'an...</div>';
+    
+    const infoSrh = cacheSurahQuran.find(s => s.nomor === nomorSurah);
+    if (infoSrh) {
+        txtNama.innerText = infoSrh.namaLatin + " (" + infoSrh.nama + ")";
+        txtSub.innerText = infoSrh.tempatTurun.toUpperCase() + " • " + infoSrh.arti + " • " + infoSrh.jumlahAyat + " Ayat";
+    }
+    
+    fetch(`https://equran.id/api/v2/surat/${nomorSurah}`)
+        .then(res => res.json())
+        .then(resData => {
+            if (resData && resData.code === 200) {
+                const listAyat = resData.data.ayat;
+                boxAyat.innerHTML = '';
+                
+                // Tambahkan teks Bismillah kecuali At-Taubah (9) dan Al-Fatihah (1)
+                if (nomorSurah !== 1 && nomorSurah !== 9) {
+                    const bisEl = document.createElement('div');
+                    bisEl.style.padding = '14px 0';
+                    bisEl.style.textAlign = 'center';
+                    bisEl.style.borderBottom = '1px dashed var(--border)';
+                    bisEl.innerHTML = '<div class="ayah-arabic" style="text-align:center; font-size:28px;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>';
+                    boxAyat.appendChild(bisEl);
+                }
+                
+                listAyat.forEach(ay => {
+                    const ayCard = document.createElement('div');
+                    ayCard.className = 'ayah-card';
+                    ayCard.innerHTML = `
+                        <div class="ayah-num-label">Ayat ${ay.nomorAyat}</div>
+                        <div class="ayah-arabic">${ay.teksArab}</div>
+                        <div class="ayah-translation">${ay.teksIndonesia}</div>
+                    `;
+                    boxAyat.appendChild(ayCard);
+                });
+                
+                document.getElementById('card-alquran').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                boxAyat.innerHTML = '<div class="quran-loading" style="color:#DC2626;">⚠️ Gagal memuat muatan teks ayat.</div>';
+            }
+        })
+        .catch(err => {
+            boxAyat.innerHTML = '<div class="quran-loading" style="color:#DC2626;">⚠️ Koneksi gagal saat memuat ayat.</div>';
+        });
+}
+
+function kembaliKeDaftarSurah() {
+    document.getElementById('quran-main-view').style.display = 'block';
+    document.getElementById('quran-detail-view').style.display = 'none';
+    document.getElementById('search-surah').value = '';
+    tampilkanDaftarSurah(cacheSurahQuran);
+}
+//]]>
+    </script>
+</body>
+</html>
