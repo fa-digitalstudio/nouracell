@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang='id'>
 <head>
     <meta charset='UTF-8'/>
     <meta content='width=device-width, initial-scale=1.0' name='viewport'/>
     <title>Dashboard Admin</title>
-    <link href='https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap' rel='stylesheet'/>
+    <link href='https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;display=swap' rel='stylesheet'/>
     <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
     
     <style>
@@ -193,7 +193,7 @@
             <div id='login-error-msg'>&#9888; Kata sandi salah! Coba lagi.</div>
         </div>
     </div>
-    
+
     <div class='topbar'>
         <button class='menu-btn' onclick='toggleMenu()' type='button'>&#9776;</button>
         <h1>DEMO ADMIN KASIR</h1>
@@ -261,7 +261,125 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
 
+    <div class='content-section' id='tab-stok'>
+        <div class='card'>
+            <div class='card-header-flex'><h2>&#10133; Tambah Barang Baru ke Stok</h2></div>
+            <form onsubmit='event.preventDefault(); simpanStok();' style='margin: 0;'>
+                <div style='display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;'>
+                    <input class='msg-input' id='input-nama-stok' placeholder='Nama Barang (Contoh: Kuota Telkomsel 10GB)' type='text'/>
+                    <input class='msg-input' id='input-jumlah-stok' placeholder='Jumlah Stok (Contoh: 50)' type='number'/>
+                    <input class='msg-input' id='input-modal-stok' placeholder='Harga Modal (Contoh: 20000)' type='number'/>
+                    <input class='msg-input' id='input-jual-stok' placeholder='Harga Jual (Contoh: 25000)' type='number'/>
+                </div>
+                <button class='btn-send-msg' id='btn-simpan-stok' type='submit'>&#10133; Simpan Barang</button>
+            </form>
+        </div>
+
+        <div class='card'>
+            <div class='card-header-flex'>
+                <h2>📦 Daftar Stok Tersedia</h2>
+                <button class='btn-refresh' onclick='loadStokData()' type='button'>🔄 Refresh Stok</button>
+            </div>
+            <div class='table-responsive'>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nama Barang</th>
+                            <th>Harga Modal</th>
+                            <th>Harga Jual</th>
+                            <th>Sisa Stok</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id='table-body-stok'>
+                        <tr><td colspan='5' style='text-align: center; color: var(--text-muted);'>Memuat data stok...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class='content-section' id='tab-pesan'>
+        <div class='card'>
+            <div class='card-header-flex'><h2>📢 Kirim Pengumuman ke Layar Kasir</h2></div>
+            <p style='font-size: 13px; color: var(--text-muted); margin-bottom: 15px;'>Pesan yang diketik di sini akan otomatis tampil sebagai notifikasi di monitor Kasir.</p>
+            
+            <form onsubmit='event.preventDefault(); kirimPesan();' style='display: flex; margin: 0;'>
+                <input class='msg-input' id='input-pesan' placeholder='Tulis instruksi atau pengumuman...' type='text'/>
+                <button class='btn-send-msg' id='btn-kirim' type='submit'>Kirim</button>
+            </form>
+            
+            <p id='status-pesan' style='font-size:12px; color:#10B981; margin-top:10px; display:none;'>&#9989; Pesan berhasil dikirim ke layar kasir🖥</p>
+        </div>
+
+        <div class='card'>
+            <div class='card-header-flex'>
+                <h2>📥 Kotak Masuk</h2>
+                <button class='btn-refresh' onclick='loadPesanMasuk()' type='button'>🔄 Refresh Pesan</button>
+            </div>
+            <div class='table-responsive'>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Waktu</th>
+                            <th>Pengirim</th>
+                            <th>Pesan</th>
+                        </tr>
+                    </thead>
+                    <tbody id='table-body-pesan'>
+                        <tr><td colspan='3' style='text-align: center; color: var(--text-muted);'>Memuat pesan...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class='content-section' id='tab-tutorial'>
+        <div class='card' style='background: linear-gradient(135deg, #4F46E5 0%, #3B82F6 100%); color: white; text-align: center; padding: 35px 20px; border:none;'>
+            <h2 style='font-size: 22px; margin-bottom: 10px; color: white;'>Selamat Datang di Panduan Admin! 🚀</h2>
+            <p style='font-size: 13px; opacity: 0.9;'>Pelajari cara mudah dan cepat untuk mengelola Aplikasi kasir Pulsa.</p>
+        </div>
+
+        <div class='card'>
+            <div class='card-header-flex'><h2>📊 1. Dashboard &amp; Riwayat</h2></div>
+            <p style='font-size: 13px; color: var(--text-muted); line-height: 1.8;'>
+                &#8226; <b>Pantau Keuangan:</b> Anda dapat melihat Total Transaksi, Pendapatan, dan Keuntungan di bagian atas.<br/>
+                &#8226; <b>Pelunasan Hutang:</b> Jika pelanggan sudah membayar hutang, klik tombol <span class='badge-lunas' style='padding:4px 8px;'>&#10004;&#65039; Lunas</span> pada tabel tabel transaksi.<br/>
+                &#8226; <b>Hapus Data:</b> Gunakan fitur Hapus (per item) atau Hapus Semua Data di pojok kanan atas dengan hati-hati karena data tidak bisa dikembalikan.
+            </p>
+        </div>
+
+        <div class='card'>
+            <div class='card-header-flex'><h2>📦 2. Mengelola Stok Barang</h2></div>
+            <p style='font-size: 13px; color: var(--text-muted); line-height: 1.8;'>
+                &#8226; Masuk ke menu <b>Data Stok Barang</b>.<br/>
+                &#8226; Isi Nama Barang, Jumlah, Harga Modal, dan Harga Jual lalu klik <b>Simpan Barang</b>.<br/>
+                &#8226; <b>Peringatan Stok Otomatis:</b> Jika jumlah stok tersisa 5 atau kurang, sistem akan memberikan tanda peringatan warna merah pada angka stok secara otomatis agar Anda segera menambah inventaris.
+            </p>
+        </div>
+
+        <div class='card'>
+            <div class='card-header-flex'><h2>💬 3. Pesan ke Kasir</h2></div>
+            <p style='font-size: 13px; color: var(--text-muted); line-height: 1.8;'>
+                &#8226; Gunakan menu ini untuk mengirimkan pesan atau instruksi ke kasir yang sedang bertugas.<br/>
+                &#8226; Pesan yang Anda kirim akan otomatis muncul dan masuk di layar kasir secara <i>real-time</i>.<br/>
+                &#8226; Balasan dari kasir dapat dilihat di bagian <b>Kotak Masuk</b> (Otomatis menyegarkan data setiap 60 detik) Atau klik Resfreh Untuk Manual.
+            </p>
+        </div>
+        
+        <div class='card'>
+            <div class='card-header-flex'><h2>🌙 4. Tampilan &amp; Keamanan</h2></div>
+            <p style='font-size: 13px; color: var(--text-muted); line-height: 1.8;'>
+                &#8226; <b>Mode Gelap (Dark Mode):</b> Klik ikon Bulan/Matahari di pojok kanan atas layar untuk mengganti tema.<br/>
+                &#8226; <b>Logout:</b> Selalu klik <b>Keluar Dashboard</b> pada menu kiri bawah jika Anda akan meninggalkan layar untuk menjaga keamanan data.
+            </p>
+        </div>
+    </div>
+
+    <script>
         // JANGAN LUPA: GANTI URL DI BAWAH INI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
         const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbyNjVAVAtpS3JTzDb5oAnRTPyMIYNB1K8HO94N1NYhizwRNTcUS0TxRXYYpRcHIsLLu/exec'; 
 
@@ -735,8 +853,7 @@
             if (tabPesan && tabPesan.classList.contains('active')) {
                 loadPesanMasuk();
             }
-        }, 60000);
+        }, 100000);
     </script>
 </body>
 </html>
-            
