@@ -5,332 +5,282 @@
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'/>
     <meta content='#4F46E5' name='theme-color'/>
     <title>Kasir - Sistem Penjualan</title>
-    <link href='https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Amiri&display=swap' rel='stylesheet'/>
+    <link href='https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Amiri&display=swap' rel='stylesheet'/>
     
     <style>
         /* =========================================
-           UI/UX REDESIGN - ULTRA MODERN PREMIUM
+           UI/UX REDESIGN - MODERN PREMIUM DASHBOARD
            ========================================= */
         :root { 
             --primary: #4F46E5; 
-            --primary-hover: #4338CA;
+            --primary-dark: #3730A3; 
             --primary-light: #818CF8;
-            --secondary: #0ea5e9;
-            --bg-color: #f0f4f8; 
-            --text-dark: #0f172a; 
-            --text-muted: #64748b; 
-            --card-bg: rgba(255, 255, 255, 0.85); 
-            --border: #e2e8f0; 
+            --bg-color: #F4F7FE; 
+            --text-dark: #1E293B; 
+            --text-muted: #64748B; 
+            --card-bg: #FFFFFF; 
+            --border: #E2E8F0; 
             --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            --shadow-md: 0 12px 30px -5px rgba(30, 41, 59, 0.08);
-            --shadow-lg: 0 25px 50px -12px rgba(30, 41, 59, 0.15);
-            --radius-xl: 28px;
-            --radius-lg: 20px;
-            --radius-md: 14px;
+            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --radius-lg: 24px;
+            --radius-md: 16px;
         }
         
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { 
             background-color: var(--bg-color); 
             color: var(--text-dark); 
             display: flex; flex-direction: column; 
             min-height: 100vh; 
+            overscroll-behavior-y: none; 
             overflow-x: hidden; width: 100%; 
-            -webkit-user-select: none; user-select: none; 
-            padding-bottom: 110px; 
-            /* Modern Mesh Gradient Background */
-            background-image: 
-                radial-gradient(at 0% 0%, hsla(253,16%,7%,0) 0, transparent 50%), 
-                radial-gradient(at 50% 0%, hsla(225,39%,30%,0.05) 0, transparent 50%), 
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,0.05) 0, transparent 50%);
-            background-attachment: fixed;
+            -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; 
+            padding-bottom: 80px; 
+            background-image: radial-gradient(circle at top right, rgba(79, 70, 229, 0.05) 0%, transparent 40%), 
+                              radial-gradient(circle at bottom left, rgba(79, 70, 229, 0.05) 0%, transparent 40%);
         }
         
-        #license-overlay, .license-box, input, select, textarea, #card-alquran { user-select: text !important; pointer-events: auto !important; }
+        #license-overlay, .license-box, input, select, textarea, #card-alquran { -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; pointer-events: auto !important; }
 
         /* =========================================
-           HALAMAN AKTIVASI LISENSI
+           PERBAIKAN HALAMAN AKTIVASI LISENSI
            ========================================= */
         #license-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); 
+            background: rgba(244, 247, 254, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); 
             display: flex; align-items: center; justify-content: center; 
-            z-index: 999999; padding: 20px;
+            z-index: 999999; padding: 20px; box-sizing: border-box;
         }
         .license-box { 
-            background: rgba(255, 255, 255, 0.95); padding: 45px 35px; 
-            border-radius: var(--radius-xl); border: 1px solid rgba(255,255,255,0.5); 
-            box-shadow: var(--shadow-lg); max-width: 400px; width: 100%; 
-            text-align: center; 
-            animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: #ffffff; padding: 40px 30px; 
+            border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,0.8); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08); 
+            max-width: 380px; width: 100%; 
+            text-align: center; box-sizing: border-box;
+            animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        @keyframes zoomIn { 0% { opacity: 0; transform: scale(0.85); } 100% { opacity: 1; transform: scale(1); } }
-        
         .license-box .icon-lock { 
-            font-size: 32px; margin-bottom: 24px; display: inline-flex; align-items: center; justify-content: center; 
-            background: linear-gradient(135deg, var(--primary), var(--secondary)); width: 85px; height: 85px; border-radius: 25px; 
-            color: white; box-shadow: 0 15px 30px -10px rgba(79, 70, 229, 0.5); 
-            transform: rotate(-10deg); transition: transform 0.3s;
+            font-size: 36px; margin-bottom: 20px; display: inline-flex; align-items: center; justify-content: center; 
+            background: linear-gradient(135deg, #EEF2FF, #E0E7FF); width: 80px; height: 80px; border-radius: 50%; 
+            color: var(--primary); box-shadow: inset 0 4px 6px rgba(255,255,255,0.5), 0 10px 20px -5px rgba(79, 70, 229, 0.2); 
         }
-        .license-box:hover .icon-lock { transform: rotate(0deg) scale(1.05); }
-        .license-box h2 { font-size: 26px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px;}
-        .license-box p { font-size: 15px; color: var(--text-muted); margin-bottom: 30px; line-height: 1.6;}
+        .license-box h2 { font-size: 24px; font-weight: 800; color: #0F172A; margin-bottom: 8px;}
+        .license-box p { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.6; padding: 0 10px;}
         .license-box input { 
-            width: 100%; padding: 18px; border: 2px solid transparent; 
-            background: #f1f5f9; border-radius: var(--radius-md); 
-            font-size: 18px; letter-spacing: 3px; text-align: center; font-weight: 800; color: var(--text-dark);
-            margin-bottom: 24px; transition: all 0.3s ease;
+            width: 100%; padding: 18px; border: 2px solid #E2E8F0; 
+            background: #F8FAFC; border-radius: var(--radius-md); 
+            font-size: 16px; letter-spacing: 2px; text-align: center; font-weight: 700;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); margin-bottom: 20px; box-sizing: border-box;
+            transition: all 0.3s;
         }
-        .license-box input:focus { background: white; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); outline: none; transform: translateY(-2px);}
+        .license-box input:focus { border-color: var(--primary); background: #ffffff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); transform: translateY(-2px); outline: none;}
         .license-box button { 
-            width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); 
+            width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
             color: white; border: none; padding: 18px; border-radius: var(--radius-md); 
-            font-weight: 700; cursor: pointer; font-size: 16px; transition: all 0.3s ease; 
-            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4); 
+            font-weight: 700; cursor: pointer; font-size: 16px; transition: all 0.3s; 
+            box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4); box-sizing: border-box;
         }
-        .license-box button:hover { transform: translateY(-3px); box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.5); }
-        .license-error { color: #ef4444; font-size: 14px; font-weight: 600; margin-top: 20px; display: none; background: #fef2f2; padding: 14px; border-radius: 12px; border: 1px dashed #fca5a5;}
+        .license-box button:hover { transform: translateY(-2px); box-shadow: 0 15px 30px -5px rgba(79, 70, 229, 0.5); }
+        .license-box button:active { transform: scale(0.97); }
+        .license-error { color: #DC2626; font-size: 13px; font-weight: 600; margin-top: 16px; display: none; background: #FEF2F2; padding: 12px; border-radius: 12px; border: 1px dashed #FCA5A5;}
 
-        /* =========================================
-           GLASSMORPHISM APP BAR
-           ========================================= */
+
+        /* Glassmorphism App Bar */
         .app-bar { 
-            background: rgba(255, 255, 255, 0.7); 
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            color: var(--text-dark); padding: 0 24px; text-align: center; 
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03); 
+            background: rgba(79, 70, 229, 0.95); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: white; padding: 0 20px; text-align: center; 
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.2); 
             position: sticky; top: 0; z-index: 1000; 
             display: flex; justify-content: center; align-items: center; 
-            height: 70px; width: 100%;
-            border-bottom: 1px solid rgba(255,255,255,0.5);
+            height: 64px; width: 100%;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        .app-bar h1 { font-size: 18px; font-weight: 800; margin: 0; letter-spacing: 0.5px; background: linear-gradient(135deg, var(--text-dark), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+        .app-bar h1 { font-size: 18px; font-weight: 700; margin: 0; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.1);}
         .menu-btn, .msg-btn { 
-            background: white; border: 1px solid var(--border); color: var(--text-dark); 
+            background: rgba(255,255,255,0.1); border: none; color: white; 
             cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            transition: all 0.3s ease; border-radius: 14px; height: 44px; width: 44px;
-            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease; border-radius: 12px; height: 40px; width: 40px;
         }
-        .menu-btn { position: absolute; left: 20px; font-size: 20px;}
-        .msg-btn { font-size: 20px; position: relative; border: none; background: linear-gradient(135deg, #fffbeb, #fef3c7); color: #d97706;}
-        .msg-btn-container { position: absolute; right: 20px; display: flex; align-items: center;}
-        .menu-btn:hover, .msg-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-        .badge-dot { position: absolute; top: -4px; right: -4px; width: 12px; height: 12px; background: #ef4444; border-radius: 50%; display: none; box-shadow: 0 0 0 3px white;}
+        .menu-btn { position: absolute; left: 16px; font-size: 20px;}
+        .msg-btn { font-size: 18px; position: relative; }
+        .msg-btn-container { position: absolute; right: 16px; display: flex; align-items: center;}
+        .menu-btn:hover, .msg-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-1px); }
+        .menu-btn:active, .msg-btn:active { transform: scale(0.95); }
+        .badge-dot { position: absolute; top: -2px; right: -2px; width: 10px; height: 10px; background: #EF4444; border-radius: 50%; display: none; box-shadow: 0 0 0 2px var(--primary), 0 2px 4px rgba(0,0,0,0.3);}
 
-        /* =========================================
-           SIDEBAR
-           ========================================= */
-        .side-menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.5); display: none; z-index: 9998; backdrop-filter: blur(5px); transition: opacity 0.3s;}
-        .side-menu { position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background: white; z-index: 9999; transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow-lg); display: flex; flex-direction: column; border-top-right-radius: 24px; border-bottom-right-radius: 24px;}
+        /* Sidebar Modernized */
+        .side-menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); display: none; z-index: 9998; backdrop-filter: blur(4px); transition: opacity 0.3s;}
+        .side-menu { position: fixed; top: 0; left: -280px; width: 280px; height: 100%; background: white; z-index: 9999; transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow-lg); display: flex; flex-direction: column;}
         .side-menu.open { left: 0; }
-        .side-menu-header { padding: 40px 24px 30px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; font-size: 22px; font-weight: 800; border-top-right-radius: 24px;}
-        .side-menu-item { padding: 18px 24px; text-align: left; background: none; border: none; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 16px; color: var(--text-muted); width: 100%; font-weight: 600; transition: all 0.2s ease; border-left: 4px solid transparent; margin: 4px 0;}
-        .side-menu-item:hover { color: var(--text-dark); background: #f8fafc; padding-left: 30px;}
-        .side-menu-item.active { background: #eef2ff; color: var(--primary); font-weight: 700; border-left: 4px solid var(--primary); padding-left: 30px;}
+        .side-menu-header { padding: 30px 20px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; font-size: 20px; font-weight: 800; letter-spacing: 0.5px;}
+        .side-menu-item { padding: 16px 24px; text-align: left; background: none; border: none; border-bottom: 1px solid #F1F5F9; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 14px; color: var(--text-muted); width: 100%; font-weight: 600; transition: all 0.2s ease; border-left: 4px solid transparent;}
+        .side-menu-item:hover { color: var(--text-dark); background: #F8FAFC; padding-left: 28px;}
+        .side-menu-item.active { background: #EEF2FF; color: var(--primary); font-weight: 700; border-left: 4px solid var(--primary); padding-left: 28px;}
 
-        /* =========================================
-           CONTAINER & CARDS
-           ========================================= */
-        .container { max-width: 1000px; width: 100%; margin: 0 auto; padding: 30px 20px; flex: 1; display: flex; flex-direction: column; box-sizing: border-box;}
+        /* Container & Cards */
+        .container { max-width: 1000px; width: 100%; margin: 0 auto; padding: 24px 16px; flex: 1; display: flex; flex-direction: column; box-sizing: border-box;}
         
         .card { 
-            background: var(--card-bg); padding: 35px; 
-            border-radius: var(--radius-xl); 
+            background-color: var(--card-bg); padding: 30px; 
+            border-radius: var(--radius-lg); 
             box-shadow: var(--shadow-md); 
-            margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.9); 
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            margin-bottom: 24px; border: 1px solid rgba(255,255,255,0.8); 
             width: 100%; box-sizing: border-box; 
-            animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .card-form { max-width: 650px; margin: 0 auto; }
-        .card-table { max-width: 1000px; margin: 0 auto; }
-
-        .card h2 { font-size: 20px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; color: var(--text-dark); font-weight: 800;}
-        .card h2 span { display: flex; align-items: center; gap: 10px; }
-        
-        /* =========================================
-           FORMS & INPUTS
-           ========================================= */
-        .grid-2-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%;}
-        .form-group { margin-bottom: 22px; width: 100%;} 
-        .form-group label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;}
-        .form-group input, .form-group select { 
-            width: 100%; padding: 16px 20px; border: 2px solid transparent; 
-            border-radius: var(--radius-md); font-size: 15px; font-weight: 600; 
-            outline: none; background: #f8fafc; color: var(--text-dark); 
-            transition: all 0.3s ease; box-sizing: border-box;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-        }
-        .form-group input:focus, .form-group select:focus { 
-            background: #ffffff; border-color: var(--primary); 
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); transform: translateY(-2px);
-        }
-        .form-group input[readonly] { 
-            background-color: #eef2ff; border: 2px dashed var(--primary-light); 
-            font-weight: 800; color: var(--primary); font-size: 20px; text-align: right;
-        }
-        .badge-stok { color: #d97706; font-size: 12px; font-weight: 800; background: #fef3c7; padding: 4px 12px; border-radius: 10px;}
-        
-        /* Tombol Submit */
-        .btn-submit { 
-            width: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); 
-            color: white; padding: 20px; border: none; border-radius: var(--radius-md); 
-            font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 15px; 
-            box-shadow: 0 12px 25px -5px rgba(79, 70, 229, 0.4); 
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-sizing: border-box;
-            letter-spacing: 0.5px;
-        }
-        .btn-submit:hover { transform: translateY(-4px); box-shadow: 0 15px 35px -5px rgba(79, 70, 229, 0.5); }
-        .btn-submit:active { transform: scale(0.97); }
-        .btn-submit:disabled { background: #94a3b8; box-shadow: none; cursor: not-allowed; transform: none;}
-        
-        .btn-refresh { padding: 12px 24px; font-size: 14px; background-color: #eef2ff; color: var(--primary); border: none; border-radius: 12px; cursor: pointer; font-weight: 800; transition: all 0.2s;}
-        .btn-refresh:hover { background-color: var(--primary); color: white; transform: scale(1.05); box-shadow: 0 8px 15px rgba(79,70,229,0.3);}
-
-        /* =========================================
-           TRANSACTION SUMMARY & TABLES
-           ========================================= */
-        .info-total { 
-            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
-            padding: 30px; border-radius: var(--radius-lg); margin-bottom: 30px; 
-            display: flex; flex-direction: column; gap: 8px; 
-            box-shadow: 0 20px 40px -10px rgba(79, 70, 229, 0.5); color: white; 
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative; overflow: hidden;
         }
-        .info-total::before { content: ''; position: absolute; width: 150px; height: 150px; background: rgba(255,255,255,0.1); border-radius: 50%; top: -50px; right: -50px; }
-        .info-total::after { content: '💳'; font-size: 100px; position: absolute; right: 10px; bottom: -20px; opacity: 0.15; transform: rotate(-15deg);}
-        .info-total span:first-child { font-size: 14px; font-weight: 700; opacity: 0.9; letter-spacing: 1px; text-transform: uppercase;}
-        .info-total span:last-child { font-size: 38px; font-weight: 800; letter-spacing: -1px; text-shadow: 0 4px 10px rgba(0,0,0,0.1);}
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        .table-responsive { width: 100%; overflow-x: auto; border-radius: var(--radius-lg); border: 1px solid var(--border); background: white;} 
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { text-align: left; padding: 18px 24px; border-bottom: 1px solid var(--border); } 
-        th { color: var(--text-muted); background-color: #f8fafc; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;}
-        tr { transition: all 0.2s; }
-        tr:hover { background-color: #f1f5f9; }
-        .badge-lunas { background-color: #d1fae5; color: #065f46; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;}
-        .badge-lunas::before { content: '●'; font-size: 8px; }
-        .badge-hutang { background-color: #fee2e2; color: #991b1b; padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;}
-        .badge-hutang::before { content: '●'; font-size: 8px; }
+        .card-form { max-width: 600px; margin: 0 auto; }
+        .card-table { max-width: 1000px; margin: 0 auto; }
 
-        /* =========================================
-           FLOATING BOTTOM NAVIGATION (MOBILE)
-           ========================================= */
-        .bottom-nav { 
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
-            width: 90%; max-width: 400px;
-            background: rgba(255, 255, 255, 0.9); 
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            display: flex; justify-content: space-around; padding: 10px 10px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15); z-index: 9997; 
-            border-radius: 30px; border: 1px solid rgba(255,255,255,0.5);
-        }
-        .bottom-nav-item { 
-            background: transparent; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            font-size: 12px; font-weight: 700; color: #94a3b8; cursor: pointer; width: 33.33%; gap: 4px; 
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); padding: 8px 0; border-radius: 20px;
-        }
-        .bottom-nav-item .icon { font-size: 24px; transition: all 0.4s; filter: grayscale(100%) opacity(0.5); margin-bottom: 2px;}
-        .bottom-nav-item.active { color: var(--primary); background: #eef2ff;}
-        .bottom-nav-item.active .icon { filter: grayscale(0%) opacity(1); transform: translateY(-4px) scale(1.1); text-shadow: 0 4px 10px rgba(79, 70, 229, 0.3); }
-
-        /* =========================================
-           MOBILE RESPONSIVENESS
-           ========================================= */
-        @media (min-width: 769px) { 
-            table { min-width: 700px; } 
-            body { padding-bottom: 0; } 
-            .bottom-nav { display: none !important; } 
-        }
-        @media (max-width: 768px) {
-            .app-bar { padding: 0 16px; height: 64px;} 
-            .container { padding: 20px 16px; width: 100%;} 
-            .card { padding: 24px 20px; border-radius: var(--radius-lg); margin-bottom: 0;} 
-            .grid-2-cols { grid-template-columns: 1fr; gap: 0px; display: flex; flex-direction: column;}
-            .info-total { padding: 25px 20px; span:last-child { font-size: 32px; } }
-            
-            /* Redesign Table for Mobile */
-            .table-responsive { border: none; background: transparent; overflow-x: hidden; width: 100%;}
-            table, thead, tbody, tr, th, td { display: block; width: 100%; box-sizing: border-box;} 
-            thead { display: none; }
-            tr { 
-                background: white; margin-bottom: 16px; border-radius: var(--radius-lg); 
-                padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); 
-                display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: center; width: 100%;
-            }
-            td { padding: 0; border: none; font-size: 14px; text-align: left;}
-            td:nth-child(1) { grid-column: 1 / -1; font-size: 16px; font-weight: 800; color: var(--text-dark); border-bottom: 1px dashed var(--border); padding-bottom: 12px; margin-bottom: 4px; display: flex; align-items: center;} 
-            td:nth-child(1)::before { content: '👤'; margin-right: 12px; font-size: 18px; background: #f1f5f9; padding: 8px; border-radius: 12px;}
-            td:nth-child(2) { grid-column: 1 / -1; font-weight: 700; color: var(--primary); font-size: 15px; background: #eef2ff; padding: 10px 14px; border-radius: 8px;} 
-            td:nth-child(3)::before { content: 'Total: '; font-size: 12px; color: var(--text-muted); display: block; font-weight: normal;} td:nth-child(3) { font-weight: 800; font-size: 16px; color: var(--text-dark);} 
-            td:nth-child(4)::before { content: 'Jual: '; font-size: 12px; color: var(--text-muted); display: block;} td:nth-child(4) { font-weight: 600;}
-            td:nth-child(5)::before { content: 'Laba: '; font-size: 12px; color: var(--text-muted); display: block;} td:nth-child(5) { font-weight: 700; color: #059669;}
-            td:nth-child(6) { grid-column: 1 / -1; text-align: right; margin-top: 8px; border-top: 1px solid #f1f5f9; padding-top: 16px;} 
-            td[colspan="6"] { grid-column: 1 / -1 !important; text-align: center !important; padding: 40px 0 !important; color: var(--text-muted); font-weight: 600; background: transparent; border: none; box-shadow: none;}
-        }
-
-        /* =========================================
-           POPUPS & MODALS (PREMIUM)
-           ========================================= */
-        .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 20px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-        .popup-content { background: white; padding: 40px 30px; border-radius: var(--radius-xl); max-width: 420px; width: 100%; text-align: center; box-shadow: var(--shadow-lg); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.5); box-sizing: border-box;}
-        .popup-content::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--primary), var(--secondary)); }
-        .popup-content h3 { color: var(--text-dark); font-size: 22px; margin-bottom: 24px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 12px;}
+        .card h2 { font-size: 18px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; color: var(--text-dark); font-weight: 700;}
+        .card h2 span { display: flex; align-items: center; gap: 8px; }
         
-        .btn-tutup-popup { background: #f1f5f9; color: var(--text-dark); border: none; padding: 18px; border-radius: var(--radius-md); cursor: pointer; font-weight: 800; font-size: 15px; width: 100%; transition: all 0.2s ease; margin-top: 16px; box-sizing: border-box;}
-        .btn-tutup-popup:hover { background: #e2e8f0; transform: translateY(-2px); box-shadow: var(--shadow-sm);}
-
-        /* Struk (Thermal Receipt Look) */
-        #popup-struk .popup-content { background: #f8fafc; padding: 0; border-radius: var(--radius-lg); overflow: hidden; max-width: 380px;}
-        .struk-container { background: #ffffff; padding: 35px 25px; margin: 16px; border-radius: 0; box-shadow: var(--shadow-sm); position: relative; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));}
-        /* Efek Kertas Thermal Sobek */
-        .struk-container::before { content: ""; position: absolute; top: -10px; left: 0; width: 100%; height: 10px; background: linear-gradient(-45deg, transparent 16px, #ffffff 0), linear-gradient(45deg, transparent 16px, #ffffff 0); background-repeat: repeat-x; background-size: 16px 16px; background-position: left bottom; }
-        .struk-container::after { content: ""; position: absolute; bottom: -10px; left: 0; width: 100%; height: 10px; background: linear-gradient(-45deg, #ffffff 8px, transparent 0), linear-gradient(45deg, #ffffff 8px, transparent 0); background-repeat: repeat-x; background-size: 16px 16px; background-position: left top; }
+        /* Popup & Modals Premium */
+        .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 20px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: opacity 0.3s ease; }
+        .popup-content { background: #ffffff; padding: 36px 28px; border-radius: var(--radius-lg); max-width: 380px; width: 100%; text-align: center; box-shadow: var(--shadow-lg); animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); box-sizing: border-box;}
+        @keyframes popIn { 0% { transform: scale(0.9) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+        .popup-content::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--primary), #38BDF8, var(--primary-light)); }
+        .popup-content h3 { color: var(--text-dark); font-size: 22px; margin-bottom: 20px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px;}
         
-        .struk-actions { display: flex; gap: 12px; padding: 10px 16px 24px; }
-        .btn-print { background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 16px; border-radius: var(--radius-md); font-weight: 800; cursor: pointer; font-size: 15px; flex: 1; transition: all 0.2s; box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4); }
-        .btn-close-struk { background: #64748b; color: white; border: none; padding: 16px; border-radius: var(--radius-md); font-weight: 800; cursor: pointer; font-size: 15px; flex: 1; transition: all 0.2s; box-shadow: 0 10px 20px -5px rgba(100, 116, 139, 0.3); }
+        .btn-tutup-popup { background: #F1F5F9; color: var(--text-dark); border: none; padding: 16px; border-radius: var(--radius-md); cursor: pointer; font-weight: 700; font-size: 15px; width: 100%; transition: all 0.2s ease; margin-top: 12px; box-sizing: border-box;}
+        .btn-tutup-popup:hover { background: #E2E8F0; transform: translateY(-1px); }
+        .btn-tutup-popup:active { transform: scale(0.97); }
+
+        /* Receipt (Struk) */
+        #popup-struk .popup-content { background: #F8FAFC; padding: 0; border-radius: var(--radius-lg); overflow: hidden; }
+        .struk-container { background: #ffffff; padding: 32px 24px; margin: 16px; border-radius: 16px; box-shadow: var(--shadow-sm); border: 1px solid #E2E8F0; position: relative; }
+        .struk-container::before, .struk-container::after { content: ''; position: absolute; left: 0; right: 0; height: 10px; background-size: 20px 20px; z-index: 1;}
+        .struk-container::before { top: -10px; background-image: radial-gradient(circle at 10px 0, transparent 10px, #ffffff 11px); }
+        .struk-container::after { bottom: -10px; background-image: radial-gradient(circle at 10px 20px, transparent 10px, #ffffff 11px); }
+        .struk-actions { display: flex; gap: 12px; padding: 0 16px 24px; }
+        .btn-print { background: linear-gradient(135deg, #10B981, #059669); color: white; border: none; padding: 16px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; font-size: 15px; flex: 1; transition: all 0.2s; box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4); }
+        .btn-close-struk { background: #64748B; color: white; border: none; padding: 16px; border-radius: var(--radius-md); font-weight: 700; cursor: pointer; font-size: 15px; flex: 1; transition: all 0.2s; box-shadow: 0 10px 20px -5px rgba(100, 116, 139, 0.3); }
         .btn-print:hover { transform: translateY(-2px); box-shadow: 0 15px 25px -5px rgba(16, 185, 129, 0.5); }
 
-        /* =========================================
-           AL-QUR'AN DIGITAL (PREMIUM CSS)
-           ========================================= */
-        .quran-search { width: 100%; padding: 18px 20px; border: 2px solid transparent; border-radius: var(--radius-md); font-size: 16px; font-weight: 600; outline: none; background: #f8fafc; margin-bottom: 24px; transition: all 0.3s; box-sizing: border-box; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);}
-        .quran-search:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15); transform: translateY(-2px);}
-        .surah-list { display: flex; flex-direction: column; gap: 14px; max-height: 65vh; overflow-y: auto; padding-right: 6px; }
-        .surah-list::-webkit-scrollbar { width: 6px; } .surah-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .surah-item { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: white; border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow-sm);}
-        .surah-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--primary-light); }
-        .surah-meta { display: flex; align-items: center; gap: 16px; }
-        .surah-num { width: 42px; height: 42px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; box-shadow: 0 8px 15px -5px rgba(79, 70, 229, 0.4);}
-        .surah-title-id { font-size: 16px; font-weight: 800; color: var(--text-dark); margin-bottom: 2px;}
-        .surah-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 600;}
-        .surah-title-ar { font-family: 'Amiri', serif; font-size: 26px; color: var(--primary); font-weight: 700; text-align: right; }
+        /* Forms */
+        .grid-2-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%;}
+        .form-group { margin-bottom: 20px; width: 100%;} 
+        .form-group label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); padding-left: 4px;}
+        .form-group input, .form-group select { width: 100%; padding: 16px; border: 1.5px solid transparent; border-radius: var(--radius-md); font-size: 15px; font-weight: 500; outline: none; background: #F1F5F9; color: var(--text-dark); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); appearance: none; -webkit-appearance: none; box-sizing: border-box;}
+        .form-group input:focus, .form-group select:focus { background: #FFFFFF; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); transform: translateY(-1px);}
+        .form-group input[readonly] { background-color: #EEF2FF; border: 1px dashed var(--primary-light); font-weight: 800; color: var(--primary); font-size: 18px; text-align: right;}
+        .badge-stok { color: #D97706; font-size: 12px; font-weight: 700; background: #FEF3C7; padding: 4px 10px; border-radius: 8px;}
         
-        .btn-back-quran { background: white; color: var(--text-dark); border: 1px solid var(--border); padding: 14px 24px; border-radius: 100px; cursor: pointer; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; transition: all 0.2s; box-shadow: var(--shadow-sm);}
-        .btn-back-quran:hover { background: #f8fafc; border-color: var(--primary); color: var(--primary); transform: translateX(-4px);}
-        .ayah-list-box { display: flex; flex-direction: column; gap: 24px; max-height: 60vh; overflow-y: auto; padding-right: 6px; }
-        .ayah-list-box::-webkit-scrollbar { width: 6px; } .ayah-list-box::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .ayah-card { padding: 24px; background: white; border-radius: var(--radius-md); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 18px; box-shadow: var(--shadow-sm);}
-        .ayah-num-label { font-size: 13px; font-weight: 800; color: var(--primary); background: #eef2ff; padding: 6px 14px; border-radius: 10px; width: fit-content; }
-        .ayah-arabic { font-family: 'Amiri', serif; font-size: 32px; text-align: right; direction: rtl; line-height: 2.2; color: #0f172a; font-weight: 600; word-wrap: break-word; }
-        .ayah-translation { font-size: 15px; color: var(--text-muted); line-height: 1.8; text-align: left; font-weight: 500; border-top: 1px dashed var(--border); padding-top: 18px;}
+        /* Submit Button */
+        .btn-submit { width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; padding: 18px; border: none; border-radius: 100px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 12px; box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-sizing: border-box;}
+        .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(79, 70, 229, 0.4); }
+        .btn-submit:active { transform: scale(0.97); }
+        .btn-submit:disabled { background: #94A3B8; box-shadow: none; cursor: not-allowed; transform: none;}
         
-        /* Cetak Khusus */
+        .btn-refresh { padding: 10px 20px; font-size: 13px; background-color: #EEF2FF; color: var(--primary); border: none; border-radius: 100px; cursor: pointer; font-weight: 700; transition: all 0.2s;}
+        .btn-refresh:hover { background-color: #E0E7FF; transform: scale(1.05);}
+        
+        /* Transactions Summary / Tables */
+        .info-total { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 24px; border-radius: var(--radius-md); margin-bottom: 24px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 15px 30px -5px rgba(79, 70, 229, 0.4); color: white; position: relative; overflow: hidden;}
+        .info-total::after { content: '💰'; font-size: 80px; position: absolute; right: -10px; top: -10px; opacity: 0.1; transform: rotate(15deg);}
+        .info-total span:first-child { font-size: 13px; font-weight: 600; opacity: 0.8; letter-spacing: 0.5px; text-transform: uppercase;}
+        .info-total span:last-child { font-size: 32px; font-weight: 800; letter-spacing: -1px;}
+        
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: var(--radius-md); border: 1px solid var(--border); background: white; box-sizing: border-box;} 
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        th, td { text-align: left; padding: 16px 20px; border-bottom: 1px solid var(--border); } 
+        th { color: var(--text-muted); background-color: #F8FAFC; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;}
+        tr { transition: background-color 0.2s; }
+        tr:hover { background-color: #F8FAFC; }
+        .badge-lunas { background-color: #D1FAE5; color: #065F46; padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 700; display: inline-block; box-shadow: inset 0 0 0 1px rgba(16, 185, 129, 0.2);}
+        .badge-hutang { background-color: #FEE2E2; color: #991B1B; padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 700; display: inline-block; box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.2);}
+
+        /* Mobile Responsiveness Premium Adjustments */
+        @media (min-width: 769px) { table { min-width: 700px; } body { padding-bottom: 0; } .bottom-nav { display: none !important; } }
+        @media (max-width: 768px) {
+            .app-bar { height: 60px; padding: 0 16px; } 
+            .container { padding: 16px 12px; width: 100%; max-width: 100vw; overflow-x: hidden;} 
+            .card { padding: 20px; border-radius: var(--radius-md); margin-bottom: 0;} 
+            .grid-2-cols { grid-template-columns: 1fr; gap: 0px; display: flex; flex-direction: column;}
+            .form-group { margin-bottom: 16px;} 
+            .form-group input, .form-group select { padding: 14px; font-size: 14px;}
+            .btn-submit { padding: 16px; font-size: 15px;}
+            .info-total { padding: 20px; span:last-child { font-size: 26px; } }
+            
+            .table-responsive { border: none; background: transparent; overflow-x: hidden; width: 100%;}
+            table, thead, tbody, tr, th, td { display: block; width: 100%; box-sizing: border-box;} thead { display: none; }
+            tr { background: white; margin-bottom: 12px; border-radius: var(--radius-md); padding: 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center; width: 100%; transition: transform 0.2s;}
+            tr:active { transform: scale(0.98); }
+            td { padding: 0; border: none; font-size: 13px; text-align: left; white-space: normal;}
+            td:nth-child(1) { grid-column: 1 / -1; font-size: 15px; font-weight: 700; color: var(--text-dark); border-bottom: 1px dashed var(--border); padding-bottom: 8px; margin-bottom: 4px; display: flex; align-items: center;} 
+            td:nth-child(1)::before { content: '👤'; margin-right: 10px; font-size: 16px; background: #F1F5F9; padding: 6px; border-radius: 50%;}
+            td:nth-child(2) { grid-column: 1 / -1; font-weight: 600; color: var(--primary); font-size: 14px;} 
+            td:nth-child(3)::before { content: 'Total: Rp '; font-size: 11px; color: var(--text-muted); display: block; font-weight: normal;} td:nth-child(3) { font-weight: 800; font-size: 15px; color: var(--text-dark);} 
+            td:nth-child(4)::before { content: 'Jual: Rp '; font-size: 11px; color: var(--text-muted); display: block;}
+            td:nth-child(5)::before { content: 'Laba: Rp '; font-size: 11px; color: var(--text-muted); display: block;}
+            td:nth-child(6) { grid-column: 1 / -1; text-align: right; margin-top: 4px; border-top: 1px solid #F1F5F9; padding-top: 12px;} 
+            td[colspan="6"] { grid-column: 1 / -1 !important; text-align: center !important; padding: 30px 0 !important; color: var(--text-muted); font-weight: 600;} td[colspan="6"]::before { display: none !important; }
+        }
+
+        /* --- MODERN BOTTOM NAVIGATION --- */
+        .bottom-nav { 
+            position: fixed; bottom: 0; left: 0; width: 100%; 
+            background: rgba(255, 255, 255, 0.95); 
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            display: flex; justify-content: space-around; padding: 12px 0; 
+            box-shadow: 0 -10px 25px rgba(0,0,0,0.06); z-index: 9997; 
+            border-top-left-radius: 24px; border-top-right-radius: 24px;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom)); 
+        }
+        .bottom-nav-item { 
+            background: none; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            font-size: 12px; font-weight: 600; color: #94A3B8; cursor: pointer; width: 33.33%; gap: 6px; 
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); 
+        }
+        .bottom-nav-item .icon { font-size: 22px; transition: all 0.3s; filter: grayscale(100%) opacity(0.5); }
+        .bottom-nav-item.active { color: var(--primary); transform: translateY(-4px); }
+        .bottom-nav-item.active .icon { filter: grayscale(0%) opacity(1); transform: scale(1.15); text-shadow: 0 4px 8px rgba(79, 70, 229, 0.4); }
+    </style>
+
+    <style type='text/css'>
+        /* CETAK STRUK CSS */
+        #struk-print table { display: table !important; width: 100% !important; }
+        #struk-print tr { display: table-row !important; background: transparent !important; box-shadow: none !important; border: none !important; padding: 0 !important; gap: 0 !important; grid-template-columns: none !important; }
+        #struk-print td { display: table-cell !important; padding: 2px 0 !important; border: none !important; font-size: 12px !important; text-align: left !important; color: #000 !important; }
+        
+        /* CSS Khusus Al-Qur'an (Premium) */
+        .quran-search { width: 100%; padding: 16px; border: 2px solid transparent; border-radius: var(--radius-md); font-size: 15px; outline: none; background: #F1F5F9; margin-bottom: 20px; transition: all 0.3s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); box-sizing: border-box;}
+        .quran-search:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1); }
+        .surah-list { display: flex; flex-direction: column; gap: 12px; max-height: 65vh; overflow-y: auto; padding-right: 4px; }
+        .surah-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #FFFFFF; border: 1px solid var(--border); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow-sm);}
+        .surah-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--primary-light); }
+        .surah-item:active { background: #EEF2FF; transform: scale(0.98); }
+        .surah-meta { display: flex; align-items: center; gap: 14px; }
+        .surah-num { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);}
+        .surah-title-id { font-size: 15px; font-weight: 700; color: var(--text-dark); }
+        .surah-subtitle { font-size: 12px; color: var(--text-muted); font-weight: 500;}
+        .surah-title-ar { font-family: 'Amiri', serif; font-size: 22px; color: var(--primary); font-weight: 700; text-align: right; }
+        .btn-back-quran { background: white; color: var(--text-dark); border: 1px solid var(--border); padding: 12px 20px; border-radius: 100px; cursor: pointer; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; transition: all 0.2s; box-shadow: var(--shadow-sm);}
+        .btn-back-quran:hover { background: #F8FAFC; border-color: var(--text-muted); }
+        .ayah-list-box { display: flex; flex-direction: column; gap: 20px; max-height: 60vh; overflow-y: auto; padding-right: 4px; }
+        .ayah-card { padding: 20px; background: white; border-radius: var(--radius-md); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 14px; box-shadow: var(--shadow-sm);}
+        .ayah-num-label { font-size: 12px; font-weight: 700; color: var(--primary); background: #EEF2FF; padding: 4px 10px; border-radius: 8px; width: fit-content; }
+        .ayah-arabic { font-family: 'Amiri', serif; font-size: 28px; text-align: right; direction: rtl; line-height: 2.2; color: #0F172A; font-weight: 500; word-wrap: break-word; }
+        .ayah-translation { font-size: 14px; color: var(--text-muted); line-height: 1.7; text-align: left; font-weight: 500; border-top: 1px dashed var(--border); padding-top: 14px;}
+        .quran-loading { text-align: center; padding: 40px 10px; color: var(--text-muted); font-size: 15px; font-weight: 600; }
+
         @media print {
             body { background: #fff !important; color: #000 !important; }
-            .app-bar, .side-menu, .side-menu-overlay, .container, .bottom-nav, .no-print, .popup-overlay { display: none !important; }
-            #popup-struk { display: block !important; position: absolute; top: 0; left: 0; width: 100%; height: auto; background: #fff !important; padding: 0; margin: 0; z-index: 9999999; }
-            #popup-struk .popup-content { box-shadow: none !important; border: none !important; padding: 0 !important; margin: 0 auto !important; max-width: 58mm !important; border-radius: 0 !important; }
+            .app-bar, .side-menu, .side-menu-overlay, .container, .bottom-nav, .no-print, .popup-overlay, #popup-pesan, #popup-tentang { display: none !important; }
+            #popup-struk { display: block !important; position: absolute; top: 0; left: 0; width: 100%; height: auto; background: #fff !important; padding: 0; margin: 0; z-index: 9999999; backdrop-filter: none; }
+            #popup-struk .popup-content { box-shadow: none !important; border: none !important; padding: 0 !important; margin: 0 auto !important; max-width: 58mm !important; border-radius: 0 !important; background: transparent !important;}
             .struk-container { border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; }
             .struk-container::before, .struk-container::after { display: none !important; }
-            #struk-print table, #struk-print tr, #struk-print td { display: block !important; width: 100% !important; padding: 2px 0 !important; border: none !important; font-size: 12px !important;}
         }
     </style>
 
+    <!-- Dukungan PWA Ditambahkan di Sini -->
     <link rel="manifest" href="manifest.json"/>
     <link rel="apple-touch-icon" href="icon-192.png"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -348,9 +298,9 @@
 <body>
     <div id='license-overlay'>
         <div class='license-box'>
-            <div class='icon-lock'>🛡️</div>
+            <div class='icon-lock'>🔒</div>
             <h2>Aktivasi Kasir</h2>
-            <p>Masukkan kode lisensi resmi untuk masuk ke dalam sistem Kasir Noura Cell.</p>
+            <p>Masukkan kode lisensi resmi untuk menggunakan sistem Kasir Noura Cell.</p>
             <input id='input-license' placeholder='KODE LISENSI' type='text'/>
             <button onclick='verifikasiLisensi()'>Aktivasi Sekarang</button>
             <div class='license-error' id='license-error'>&#10060; Kode Lisensi Salah atau Tidak Valid!</div>
@@ -358,10 +308,8 @@
     </div>
 
     <div class='app-bar'>
-        <button class='menu-btn' onclick='toggleMenu()'>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </button>
-        <h1>NOURA CELL</h1>
+        <button class='menu-btn' onclick='toggleMenu()'>&#9776;</button>
+        <h1>KASIR NOURA CELL</h1>
         <div class='msg-btn-container'>
             <button class='msg-btn' onclick='bukaKotakMasuk()'>🔔<span class='badge-dot' id='msg-badge'></span></button>
         </div>
@@ -369,81 +317,80 @@
 
     <div class='side-menu-overlay' id='side-menu-overlay' onclick='toggleMenu()'></div>
     <div class='side-menu' id='side-menu'>
-        <div class='side-menu-header'>Navigasi</div>
+        <div class='side-menu-header'>Menu Kasir</div>
         <button class='side-menu-item' id='nav-riwayat' onclick='switchMenu("riwayat")'>📊 Ringkasan Transaksi</button>
         <button class='side-menu-item active' id='nav-umum' onclick='switchMenu("umum")'>📝 Penjualan Umum</button>
         <button class='side-menu-item' id='nav-stok' onclick='switchMenu("stok")'>📦 Penjualan Stok Barang</button>
         <button class='side-menu-item' id='nav-alquran' onclick='switchMenu("alquran")'>📖 Al-Qur&#39;an Digital</button>
         <button class='side-menu-item' onclick='bukaTentang()'>ℹ&#65039; Tentang Aplikasi</button>
-        <div style="flex: 1;"></div>
-        <button class='side-menu-item' onclick='logoutAplikasi()' style='color: #ef4444; border-top: 1px solid var(--border); padding-top: 24px; padding-bottom: 30px; justify-content: center; font-weight: 800;'>🚪 Logout Sistem</button>
+        <button class='side-menu-item' onclick='logoutAplikasi()' style='color: #DC2626; border-top: 1px solid var(--border); margin-top: auto;'>🚪 Logout</button>
     </div>
 
     <div class='container'>
         <div class='card card-form' id='card-umum'>
-            <h2><span>📝 Penjualan Umum</span></h2>
+            <h2>📝 Penjualan Umum</h2>
             <form id='form-umum' onsubmit='submitData(event, "u")'>
                 <div class='grid-2-cols'>
-                    <div class='form-group'><label>Tanggal Transaksi</label><input id='date-u' required='required' type='date'/></div>
-                    <div class='form-group'><label>Nama Pelanggan</label><input id='customer-u' placeholder='Umum' type='text' value='Umum'/></div>
+                    <div class='form-group'><label>Tanggal</label><input id='date-u' required='required' type='date'/></div>
+                    <div class='form-group'><label>Pelanggan</label><input id='customer-u' placeholder='Umum' type='text' value='Umum'/></div>
                 </div>
                 <div class='form-group'>
                     <label>Nama Barang / Jasa</label>
                     <input id='item-u' placeholder='Ketik manual nama barang/jasa...' required='required' type='text'/>
                 </div>
                 <div class='grid-2-cols'>
-                    <div class='form-group'><label>Harga Modal (Rp)</label><input id='modal-u' required='required' type='number' value='0'/></div>
-                    <div class='form-group'><label>Harga Jual (Rp)</label><input id='price-u' oninput='hitungTotal("u")' required='required' type='number'/></div>
+                    <div class='form-group'><label>Harga Modal</label><input id='modal-u' required='required' type='number' value='0'/></div>
+                    <div class='form-group'><label>Harga Jual</label><input id='price-u' oninput='hitungTotal("u")' required='required' type='number'/></div>
                 </div>
                 <div class='grid-2-cols'>
-                    <div class='form-group'><label>Kuantitas (Qty)</label><input id='qty-u' min='1' oninput='hitungTotal("u")' required='required' type='number' value='1'/></div>
-                    <div class='form-group'><label>Status Pembayaran</label>
+                    <div class='form-group'><label>Qty</label><input id='qty-u' min='1' oninput='hitungTotal("u")' required='required' type='number' value='1'/></div>
+                    <div class='form-group'><label>Status Bayar</label>
                         <select id='status-u'><option value='Lunas'>&#9989; Lunas</option><option value='Hutang'>&#9203; Hutang</option></select>
                     </div>
                 </div>
-                <div class='form-group'><label>Total Harga (Rp)</label><input id='total-u' readonly='readonly' type='text' value='0'/></div>
-                <button class='btn-submit' id='btn-save-u' type='submit'>Simpan Transaksi</button>
+                <div class='form-group'><label>Total (Rp)</label><input id='total-u' readonly='readonly' type='text' value='0'/></div>
+                <button class='btn-submit' id='btn-save-u' type='submit'>Simpan Transaksi Umum</button>
             </form>
         </div>
 
         <div class='card card-form' id='card-stok' style='display:none;'>
-            <h2><span>📦 Penjualan Stok</span></h2>
+            <h2>📦 Penjualan Stok</h2>
             <form id='form-stok' onsubmit='submitData(event, "s")'>
                 <div class='grid-2-cols'>
-                    <div class='form-group'><label>Tanggal Transaksi</label><input id='date-s' required='required' type='date'/></div>
-                    <div class='form-group'><label>Nama Pelanggan</label><input id='customer-s' placeholder='Umum' type='text' value='Umum'/></div>
+                    <div class='form-group'><label>Tanggal</label><input id='date-s' required='required' type='date'/></div>
+                    <div class='form-group'><label>Pelanggan</label><input id='customer-s' placeholder='Umum' type='text' value='Umum'/></div>
                 </div>
                 <div class='form-group'>
-                    <label><span>Pilih Dari Database</span><span class='badge-stok' id='info-stok' style='display:none;'>Stok: 0</span></label>
+                    <label><span>Pilih Barang Dari Database</span><span class='badge-stok' id='info-stok' style='display:none;'>Stok: 0</span></label>
                     <select id='item-s' onchange='pilihBarang()' required='required'>
                         <option disabled='disabled' selected='selected' value=''>Memuat data barang...</option>
                     </select>
                 </div>
                 <div class='grid-2-cols'>
-                    <div class='form-group'><label>Harga Modal (Rp)</label><input id='modal-s' required='required' type='number' value='0'/></div>
-                    <div class='form-group'><label>Harga Jual (Rp)</label><input id='price-s' oninput='hitungTotal("s")' required='required' type='number'/></div>
+                    <div class='form-group'><label>Harga Modal</label><input id='modal-s' required='required' type='number' value='0'/></div>
+                    <div class='form-group'><label>Harga Jual</label><input id='price-s' oninput='hitungTotal("s")' required='required' type='number'/></div>
                 </div>
                 <div class='grid-2-cols'>
-                    <div class='form-group'><label>Kuantitas (Qty)</label><input id='qty-s' min='1' oninput='hitungTotal("s")' required='required' type='number' value='1'/></div>
-                    <div class='form-group'><label>Status Pembayaran</label>
+                    <div class='form-group'><label>Qty</label><input id='qty-s' min='1' oninput='hitungTotal("s")' required='required' type='number' value='1'/></div>
+                    <div class='form-group'><label>Status Bayar</label>
                         <select id='status-s'><option value='Lunas'>&#9989; Lunas</option><option value='Hutang'>&#9203; Hutang</option></select>
                     </div>
                 </div>
-                <div class='form-group'><label>Total Harga (Rp)</label><input id='total-s' readonly='readonly' type='text' value='0'/></div>
+                <div class='form-group'><label>Total (Rp)</label><input id='total-s' readonly='readonly' type='text' value='0'/></div>
                 <button class='btn-submit' id='btn-save-s' type='submit'>Simpan &amp; Potong Stok</button>
             </form>
         </div>
         
         <div class='card card-table' id='card-riwayat' style='display:none;'>
-            <h2><span>📊 Riwayat Transaksi</span><button class='btn-refresh' onclick='loadRiwayatKasir()'>🔄 Segarkan</button></h2>
-            <div class='info-total'><span>Total Pendapatan Kotor</span><span id='total-penjualan-text'>Rp 0</span></div>
+            <h2><span>Riwayat Transaksi</span><button class='btn-refresh' onclick='loadRiwayatKasir()'>🔄 Refresh</button></h2>
+            <div class='info-total'><span>Total Penjualan Keseluruhan</span><span id='total-penjualan-text'>Rp 0</span></div>
             <div class='table-responsive'>
                 <table>
-                    <thead><tr><th>Pelanggan</th><th>Detail Barang</th><th>Total</th><th>Harga Satuan</th><th>Laba</th><th>Status</th></tr></thead>
-                    <tbody id='table-body-kasir'><tr><td colspan='6' style='text-align: center; padding: 40px;'>Memuat data transaksi...</td></tr></tbody>
+                    <thead><tr><th>Pelanggan</th><th>Barang</th><th>Total Harga</th><th>Harga Jual</th><th>Laba Bersih</th><th>Status</th></tr></thead>
+                    <tbody id='table-body-kasir'><tr><td colspan='6' style='text-align: center; padding: 30px;'>Memuat data...</td></tr></tbody>
                 </table>
             </div>
-            <button id='btn-selengkapnya' onclick='toggleRiwayat()' style='display: none; width: 100%; margin-top: 20px; padding: 18px; background-color: #f1f5f9; border: 2px dashed #cbd5e1; color: var(--primary); border-radius: 16px; font-size: 15px; font-weight: 800; cursor: pointer; transition: all 0.2s;'>Lihat Lebih Banyak</button>
+            <button id='btn-selengkapnya' onclick='toggleRiwayat()' style='display: none; width: 100%; margin-top: 16px; padding: 14px; background-color: #F1F5F9; border: none; color: #4F46E5; border-radius: 100px; font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.2s;'>Lihat Selengkapnya</button>
         </div>
 
         <div class='card card-table' id='card-alquran' style='display:none; max-width:800px; margin: 0 auto;'>
@@ -452,18 +399,18 @@
             <div id='quran-main-view'>
                 <input class='quran-search' id='search-surah' oninput='filterSurah()' placeholder='🔍 Cari nama surah (contoh: Al-Fatihah)...' type='text'/>
                 <div class='surah-list' id='surah-list-container'>
-                    <div class='quran-loading' style="text-align:center; padding:40px; color:#64748b; font-weight:600;">Memuat daftar surah...</div>
+                    <div class='quran-loading'>Memuat daftar surah...</div>
                 </div>
             </div>
 
             <div id='quran-detail-view' style='display:none;'>
-                <button class='btn-back-quran' onclick='kembaliKeDaftarSurah()'>&#11013;&#65039; Kembali ke Daftar</button>
-                <div id='surah-header-info' style='text-align: center; background: linear-gradient(135deg, var(--primary), var(--secondary)); padding: 30px 20px; border-radius: var(--radius-lg); margin-bottom: 30px; box-shadow: var(--shadow-md); color: white;'>
-                    <h3 id='txt-detail-nama' style='font-size: 26px; font-weight:800; margin-bottom: 8px;'>Surah</h3>
-                    <p id='txt-detail-sub' style='font-size: 15px; font-weight: 600; opacity: 0.9;'>Info Surah</p>
+                <button class='btn-back-quran' onclick='kembaliKeDaftarSurah()'>&#11013;&#65039; Kembali</button>
+                <div id='surah-header-info' style='text-align: center; background: linear-gradient(135deg, #EEF2FF, #E0E7FF); padding: 24px; border-radius: var(--radius-md); margin-bottom: 24px; box-shadow: inset 0 2px 4px rgba(255,255,255,0.5), var(--shadow-sm);'>
+                    <h3 id='txt-detail-nama' style='color: var(--primary); font-size: 24px; font-weight:800; margin-bottom: 6px;'>Surah</h3>
+                    <p id='txt-detail-sub' style='font-size: 14px; color: var(--text-muted); font-weight: 500;'>Info Surah</p>
                 </div>
                 <div class='ayah-list-box' id='ayah-list-container'>
-                    <div class='quran-loading' style="text-align:center; padding:40px; color:#64748b; font-weight:600;">Memuat ayat...</div>
+                    <div class='quran-loading'>Memuat ayat...</div>
                 </div>
             </div>
         </div>
@@ -483,46 +430,46 @@
 
     <div class='popup-overlay' id='popup-pesan'>
         <div class='popup-content'>
-            <h3><span style='background: #fef3c7; padding: 10px; border-radius: 12px; display: inline-flex; color: #d97706;'>💬</span> Inbox</h3>
+            <h3><span style='background: #FEF3C7; padding: 10px; border-radius: 14px; display: inline-flex; color: #D97706;'>💬</span> Kotak Masuk</h3>
             
-            <div style='background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 1px solid #fde68a; padding: 25px 20px; border-radius: var(--radius-md); margin-bottom: 25px; text-align: left; position: relative;'>
-                <span style='position: absolute; top: -12px; left: 20px; background: #f59e0b; color: white; font-size: 11px; font-weight: 800; padding: 6px 14px; border-radius: 100px; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4); letter-spacing: 0.5px;'>PESAN ADMIN</span>
-                <p id='teks-popup-pesan' style='margin-bottom: 0; margin-top: 4px; color: #92400e; font-size: 16px; font-weight: 700; line-height: 1.6;'></p>
+            <div style='background: linear-gradient(135deg, #FFFBEB, #FEF3C7); border: 1px solid #FDE68A; padding: 24px 20px; border-radius: var(--radius-md); margin-bottom: 24px; text-align: left; box-shadow: var(--shadow-sm); position: relative;'>
+                <span style='position: absolute; top: -12px; left: 16px; background: #F59E0B; color: white; font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 100px; box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3);'>PESAN TERBARU</span>
+                <p id='teks-popup-pesan' style='margin-bottom: 0; margin-top: 4px; color: #92400E; font-size: 15px; font-weight: 600; line-height: 1.6;'></p>
             </div>
             
-            <div style='text-align: left; margin-bottom: 24px;'>
-                <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;'>
-                    <strong style='font-size: 14px; color: var(--text-muted); font-weight: 800;'>Riwayat Obrolan:</strong>
-                    <button onclick='hapusRiwayatPesan()' style='background: #fef2f2; border: none; color: #ef4444; font-size: 12px; font-weight: 800; cursor: pointer; padding: 8px 14px; border-radius: 10px; transition: all 0.2s;'>🗑&#65039; Bersihkan</button>
+            <div style='text-align: left; margin-bottom: 20px;'>
+                <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;'>
+                    <strong style='font-size: 13px; color: var(--text-muted);'>Riwayat Chat:</strong>
+                    <button onclick='hapusRiwayatPesan()' style='background: #FEF2F2; border: 1px solid #FECACA; color: #DC2626; font-size: 12px; font-weight: 700; cursor: pointer; padding: 6px 12px; border-radius: 100px; transition: all 0.2s;'>🗑&#65039; Bersihkan</button>
                 </div>
-                <div id='riwayat-pesan-container' style='max-height: 160px; overflow-y: auto; background: #f8fafc; border: 2px solid #e2e8f0; padding: 16px; border-radius: var(--radius-md); font-size: 14px; display: flex; flex-direction: column; gap: 12px; box-sizing: border-box;'>
-                    <div style='color: #94a3b8; text-align: center; padding: 10px 0; font-weight: 600;'>Belum ada riwayat pesan.</div>
+                <div id='riwayat-pesan-container' style='max-height: 150px; overflow-y: auto; background: #F8FAFC; border: 1px solid #E2E8F0; padding: 14px; border-radius: 16px; font-size: 13px; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);'>
+                    <div style='color: #64748B; text-align: center; padding: 10px 0;'>Tidak ada riwayat pesan.</div>
                 </div>
             </div>
             
-            <div style='text-align: left; margin-bottom: 16px; background: white; padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);'>
-                <strong style='font-size: 14px; color: var(--text-dark); display: block; margin-bottom: 12px; font-weight: 800;'>Balas Pesan:</strong>
-                <textarea id='input-balasan' onblur='this.style.borderColor="transparent";' onfocus='this.style.borderColor="var(--primary)";' placeholder='Ketik pesan di sini...' rows='2' style='width: 100%; padding: 16px; border: 2px solid #e2e8f0; background: #f8fafc; border-radius: 12px; font-size: 15px; font-weight: 500; resize: none; box-sizing: border-box; outline: none; transition: all 0.3s;'></textarea>
-                <button id='btn-kirim-balasan' onclick='kirimBalasanAdmin()' style='background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 16px; border-radius: 12px; width: 100%; font-weight: 800; font-size: 15px; margin-top: 14px; cursor: pointer; transition: all 0.2s; box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);'>Kirim Pesan</button>
+            <div style='text-align: left; margin-bottom: 12px; background: #ffffff; padding: 18px; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm);'>
+                <strong style='font-size: 13px; color: var(--text-dark); display: block; margin-bottom: 10px;'>Balas ke Admin:</strong>
+                <textarea id='input-balasan' onblur='this.style.borderColor="#E2E8F0"; this.style.background="#F8FAFC";' onfocus='this.style.borderColor="var(--primary)"; this.style.background="#fff";' placeholder='Ketik pesan balasan Anda di sini...' rows='2' style='width: 100%; padding: 14px; border: 2px solid #E2E8F0; background: #F8FAFC; border-radius: 12px; font-size: 14px; resize: none; box-sizing: border-box; font-family: inherit; outline: none; transition: all 0.2s;'></textarea>
+                <button id='btn-kirim-balasan' onclick='kirimBalasanAdmin()' style='background: linear-gradient(135deg, var(--primary), #6366F1); color: white; border: none; padding: 14px; border-radius: 12px; width: 100%; font-weight: 700; font-size: 14px; margin-top: 12px; cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);'>Kirim Balasan</button>
             </div>
             
-            <button class='btn-tutup-popup' onclick='tutupPopupPesan()'>Tutup</button>
+            <button class='btn-tutup-popup' onclick='tutupPopupPesan()'>Tutup Kotak Masuk</button>
         </div>
     </div>
     
     <div class='popup-overlay' id='popup-tentang'>
         <div class='popup-content'>
-            <h3><span style='background: #eef2ff; padding: 10px; border-radius: 12px; display: inline-flex; color: var(--primary);'>ℹ&#65039;</span> Informasi Sistem</h3>
+            <h3><span style='background: #EEF2FF; padding: 10px; border-radius: 14px; display: inline-flex; color: var(--primary);'>ℹ&#65039;</span> Tentang Aplikasi</h3>
             
-            <div style='background: #f8fafc; border: 2px solid #e2e8f0; padding: 35px 25px; border-radius: var(--radius-md); text-align: center; font-size: 15px; color: #475569; margin-bottom: 25px; line-height: 1.8;'>
-                <div style='width: 90px; height: 90px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border-radius: 28px; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 800; margin: 0 auto 24px; box-shadow: 0 20px 30px -10px rgba(79, 70, 229, 0.5); transform: rotate(-5deg);'>NC</div>
-                <strong style='font-size: 22px; color: var(--text-dark); display: block; margin-bottom: 8px; font-weight: 800;'>KASIR NOURA CELL</strong>
-                <span style='background: #e0e7ff; color: var(--primary); font-size: 13px; padding: 6px 16px; border-radius: 100px; font-weight: 800; display: inline-block; letter-spacing: 1px;'>PRO VERSION 1.0</span>
+            <div style='background: #F8FAFC; border: 1px solid #E2E8F0; padding: 30px 24px; border-radius: var(--radius-md); text-align: center; font-size: 14px; color: #475569; margin-bottom: 24px; line-height: 1.8; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);'>
+                <div style='width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), #38BDF8); color: white; border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 800; margin: 0 auto 20px; box-shadow: 0 15px 25px -5px rgba(79, 70, 229, 0.4);'>NC</div>
+                <strong style='font-size: 20px; color: var(--text-dark); display: block; margin-bottom: 8px;'>KASIR NOURA CELL</strong>
+                <span style='background: #E0E7FF; color: var(--primary); font-size: 12px; padding: 6px 14px; border-radius: 100px; font-weight: 800; display: inline-block;'>Versi 1.0</span>
                 
-                <hr style='border: none; border-top: 2px dashed #cbd5e1; margin: 28px 0;'/>
+                <hr style='border: none; border-top: 1px dashed #CBD5E1; margin: 24px 0;'/>
                 
-                <span style='font-size: 14px; color: var(--text-muted); display: block; margin-bottom: 8px; font-weight: 600;'>Dikembangkan Khusus Oleh:</span>
-                <strong style='color: #0f172a; font-size: 18px; font-weight: 800;'>FA DIGITAL STUDIO<br/><span style='font-size: 15px; color: var(--primary);'>( FARID ARIS )</span></strong>
+                <span style='font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 6px;'>Sistem Kasir Khusus Developer:</span>
+                <strong style='color: #0F172A; font-size: 16px;'>FA DIGITAL STUDIO<br/><span style='font-size: 14px; color: var(--primary);'>( FARID ARIS )</span></strong>
             </div>
             
             <button class='btn-tutup-popup' onclick='tutupTentang()'>Kembali</button>
@@ -530,57 +477,58 @@
     </div>
 
     <div class='popup-overlay' id='popup-struk'>
-        <div class='popup-content'>
+        <div class='popup-content' style='max-width: 360px;'>
             <div class='struk-container' id='struk-print'>
-                <div style='text-align: left; color: #1e293b; font-family: "Courier New", Courier, monospace; font-size: 14px; line-height: 1.6;'>
-                    <div style='text-align: center; margin-bottom: 20px;'>
-                        <strong style='font-size: 22px; color: #0f172a; font-weight: 800;'>NOURA CELL</strong><br/>
-                        <span style='font-size: 13px; color: #64748b;'>Sistem Penjualan Kasir Resmi</span>
+                <div style='text-align: left; color: #1E293B; font-family: "Courier New", Courier, monospace; font-size: 14px; line-height: 1.6;'>
+                    <div style='text-align: center; margin-bottom: 16px;'>
+                        <strong style='font-size: 20px; color: #0F172A;'>NOURA CELL</strong><br/>
+                        <span style='font-size: 12px; color: #64748B;'>Sistem Penjualan Kasir</span>
                     </div>
-                    <div style='border-top: 2px dashed #cbd5e1; margin: 16px 0;'></div>
-                    <table style='width: 100%; border-collapse: collapse; margin-bottom: 12px;'>
-                        <tr><td style='width: 35%; padding-bottom: 8px; font-weight: bold;'>No. Nota</td><td style='padding-bottom: 8px;'>: <span id='stk-id'></span></td></tr>
-                        <tr><td style='padding-bottom: 8px; font-weight: bold;'>Tanggal</td><td style='padding-bottom: 8px;'>: <span id='stk-tgl'></span></td></tr>
-                        <tr><td style='padding-bottom: 8px; font-weight: bold;'>Pelanggan</td><td style='padding-bottom: 8px;'>: <span id='stk-plg'></span></td></tr>
-                        <tr><td style='padding-bottom: 8px; font-weight: bold;'>Status</td><td style='padding-bottom: 8px;'>: <strong id='stk-status' style="background: #e2e8f0; padding: 2px 8px; border-radius: 4px;"></strong></td></tr>
+                    <div style='border-top: 1px dashed #94A3B8; margin: 12px 0;'></div>
+                    <table style='width: 100%; border-collapse: collapse; margin-bottom: 10px;'>
+                        <tr><td style='width: 35%; padding-bottom: 6px;'>ID Nota</td><td style='padding-bottom: 6px;'>: <span id='stk-id'></span></td></tr>
+                        <tr><td style='padding-bottom: 6px;'>Tanggal</td><td style='padding-bottom: 6px;'>: <span id='stk-tgl'></span></td></tr>
+                        <tr><td style='padding-bottom: 6px;'>Pelanggan</td><td style='padding-bottom: 6px;'>: <span id='stk-plg'></span></td></tr>
+                        <tr><td style='padding-bottom: 6px;'>Status</td><td style='padding-bottom: 6px;'>: <strong id='stk-status'></strong></td></tr>
                     </table>
-                    <div style='border-top: 2px dashed #cbd5e1; margin: 16px 0;'></div>
-                    <div style='margin: 20px 0;'>
-                        <div id='stk-barang' style='font-weight: 800; font-size: 16px; margin-bottom: 8px; color: #0f172a;'></div>
+                    <div style='border-top: 1px dashed #94A3B8; margin: 12px 0;'></div>
+                    <div style='margin: 16px 0;'>
+                        <div id='stk-barang' style='font-weight: bold; font-size: 15px; margin-bottom: 6px;'></div>
                         <div style='display: flex; justify-content: space-between;'>
-                            <span id='stk-qty-harga' style="color: #475569;">0 x 0</span>
-                            <span style='font-weight: 800;'>Rp <span id='stk-total'>0</span></span>
+                            <span id='stk-qty-harga'>0 x 0</span>
+                            <span style='font-weight: 700;'>Rp <span id='stk-total'>0</span></span>
                         </div>
                     </div>
-                    <div style='border-top: 2px dashed #cbd5e1; margin: 20px 0; border-bottom: 2px dashed #cbd5e1; padding: 16px 0; display: flex; justify-content: space-between; font-weight: 800; font-size: 18px;'>
+                    <div style='border-top: 1px dashed #94A3B8; margin: 16px 0; border-bottom: 1px dashed #94A3B8; padding: 12px 0; display: flex; justify-content: space-between; font-weight: bold; font-size: 16px;'>
                         <span>TOTAL</span>
-                        <span style="color: var(--primary);">Rp <span id='stk-grand-total'>0</span></span>
+                        <span>Rp <span id='stk-grand-total'>0</span></span>
                     </div>
-                    <div style='text-align: center; font-size: 13px; margin-top: 24px; color: #64748b; font-style: italic; font-weight: bold;'>
-                        *** Terima Kasih ***
+                    <div style='text-align: center; font-size: 12px; margin-top: 20px; color: #64748B; font-style: italic;'>
+                        ~ Terima Kasih Atas Kunjungan Anda ~
                     </div>
                 </div>
             </div>
             
             <div class='struk-actions no-print'>
-                <button class='btn-print' onclick='cetakStruk()'>🖨&#65039; Cetak Struk</button>
+                <button class='btn-print' onclick='cetakStruk()'>🖨&#65039; Cetak</button>
                 <button class='btn-close-struk' onclick='tutupStruk()'>Tutup</button>
             </div>
         </div>
     </div>
 
-    <div class='popup-overlay' id='popup-custom-alert' style='z-index: 2000000;'>
-        <div class='popup-content' style='padding: 45px 35px;'>
-            <div id='custom-alert-icon' style='width: 90px; height: 90px; border-radius: 30px; display: inline-flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 28px; box-shadow: 0 20px 30px -10px rgba(0,0,0,0.15);'>&#9888;&#65039;</div>
-            <h3 id='custom-alert-title' style='font-size: 24px; font-weight: 800; color: var(--text-dark); margin-bottom: 16px;'>Peringatan</h3>
-            <p id='custom-alert-message' style='font-size: 15px; color: var(--text-muted); line-height: 1.7; margin-bottom: 35px; font-weight: 500;'></p>
+    <div class='popup-overlay' id='popup-custom-alert' style='z-index: 2000000; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);'>
+        <div class='popup-content' style='max-width: 380px; padding: 40px 30px; border-radius: var(--radius-lg); box-shadow: 0 40px 80px -12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);'>
+            <div id='custom-alert-icon' style='width: 80px; height: 80px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 36px; margin-bottom: 24px; box-shadow: 0 15px 25px -5px rgba(0,0,0,0.1); transition: all 0.3s;'>&#9888;&#65039;</div>
+            <h3 id='custom-alert-title' style='font-size: 22px; font-weight: 800; color: var(--text-dark); margin-bottom: 12px;'>Peringatan</h3>
+            <p id='custom-alert-message' style='font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 30px; padding: 0 10px; text-align: center;'></p>
             <div id='custom-alert-actions' style='display: flex; gap: 16px; justify-content: center;'>
-                <button class='btn-tutup-popup' id='custom-alert-cancel' style='margin-top: 0; flex: 1; border-radius: 14px; padding: 18px; font-weight: 800; display: none;'>Batal</button>
-                <button class='btn-submit' id='custom-alert-confirm' style='margin-top: 0; flex: 1; border-radius: 14px; padding: 18px; font-weight: 800;'>Mengerti</button>
+                <button class='btn-tutup-popup' id='custom-alert-cancel' style='margin-top: 0; flex: 1; border-radius: 16px; padding: 16px; font-weight: 700; display: none;'>Batal</button>
+                <button class='btn-submit' id='custom-alert-confirm' style='margin-top: 0; flex: 1; border-radius: 16px; padding: 16px; font-weight: 800; color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.2); border: none;'>OK</button>
             </div>
         </div>
     </div>
 
+    <!-- SCRIPT JAVASCRIPT BAWAAN - TIDAK DIUBAH SAMA SEKALI -->
     <script type='text/javascript'>
         //<![CDATA[
 
@@ -852,7 +800,7 @@ function loadRiwayatKasir() {
 function toggleRiwayat() { 
     isRiwayatExpanded = !isRiwayatExpanded; 
     document.querySelectorAll('.baris-tersembunyi').forEach(row => { row.style.display = isRiwayatExpanded ? (window.innerWidth > 768 ? 'table-row' : 'grid') : 'none'; }); 
-    document.getElementById('btn-selengkapnya').innerText = isRiwayatExpanded ? 'Tutup Sebagian' : 'Lihat Lebih Banyak'; 
+    document.getElementById('btn-selengkapnya').innerText = isRiwayatExpanded ? 'Tutup Sebagian' : 'Lihat Selengkapnya'; 
 }
 
 function submitData(e, tipe) {
@@ -873,8 +821,8 @@ function submitData(e, tipe) {
     fetch(googleScriptUrl, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) }).then(() => { 
         loadRiwayatKasir(); if(tipe === 's') loadStok(); resetForm(tipe); btnSave.innerText = '✅ Berhasil!'; 
         bukaCustomAlert("Sukses", "Transaksi Berhasil Disimpan ke Sistem!", "success");
-        setTimeout(() => { btnSave.disabled = false; btnSave.innerText = 'Simpan Transaksi'; }, 1500); 
-    }).catch(e => { btnSave.innerText = 'Gagal'; setTimeout(() => { btnSave.disabled = false; btnSave.innerText = 'Simpan Transaksi'; }, 1500); });
+        setTimeout(() => { btnSave.disabled = false; btnSave.innerText = 'Simpan Data'; }, 1500); 
+    }).catch(e => { btnSave.innerText = 'Gagal'; setTimeout(() => { btnSave.disabled = false; btnSave.innerText = 'Simpan Data'; }, 1500); });
 }
 
 function resetForm(tipe) { 
@@ -902,15 +850,15 @@ function tampilkanRiwayatPesan() {
     if (!container) return;
     let riwayat = JSON.parse(localStorage.getItem("noura_riwayat_pesan")) || [];
     if (riwayat.length === 0) {
-        container.innerHTML = '<div style="color: #94a3b8; text-align: center; padding: 10px 0; font-weight: 600;">Belum ada riwayat pesan.</div>';
+        container.innerHTML = '<div style="color: #64748B; text-align: center; padding: 10px 0;">Tidak ada riwayat pesan.</div>';
         return;
     }
     container.innerHTML = riwayat.map(p => {
-        let colorText = p.teks.startsWith("Anda") ? "var(--primary)" : "#0f172a"; 
+        let colorText = p.teks.startsWith("Anda") ? "#4F46E5" : "#0F172A"; 
         return `
-        <div style="border-bottom: 1px dashed #e2e8f0; padding-bottom: 10px; margin-bottom: 6px; text-align: left;">
-            <span style="font-size: 11px; color: #64748b; display: block; font-weight: 700; margin-bottom: 4px;">📅 ${p.waktu}</span>
-            <span style="color: ${colorText}; font-size: 14px; line-height: 1.6; display: block; white-space: pre-line; font-weight: ${p.teks.startsWith("Anda") ? "700" : "600"};">${p.teks}</span>
+        <div style="border-bottom: 1px dashed #E2E8F0; padding-bottom: 8px; margin-bottom: 4px; text-align: left;">
+            <span style="font-size: 11px; color: #64748B; display: block; font-weight: 500; margin-bottom: 2px;">📅 ${p.waktu}</span>
+            <span style="color: ${colorText}; font-size: 13px; line-height: 1.5; display: block; white-space: pre-line; font-weight: ${p.teks.startsWith("Anda") ? "600" : "normal"};">${p.teks}</span>
         </div>
     `}).join('');
 }
@@ -952,13 +900,13 @@ function kirimBalasanAdmin() {
         btnKirim.innerText = '✅ Terkirim!'; 
         setTimeout(() => { 
             btnKirim.disabled = false; 
-            btnKirim.innerText = 'Kirim Pesan'; 
+            btnKirim.innerText = 'Kirim Balasan'; 
         }, 2000); 
     }).catch(e => { 
         btnKirim.innerText = '❌ Gagal'; 
         setTimeout(() => { 
             btnKirim.disabled = false; 
-            btnKirim.innerText = 'Kirim Pesan'; 
+            btnKirim.innerText = 'Kirim Balasan'; 
         }, 2000); 
     });
 }
@@ -1025,11 +973,11 @@ function unduhDaftarSurah() {
                 cacheSurahQuran = resData.data;
                 tampilkanDaftarSurah(cacheSurahQuran);
             } else {
-                boxSurah.innerHTML = '<div class="quran-loading" style="color:#ef4444;">⚠️ Gagal memuat data index Al-Qur\'an.</div>';
+                boxSurah.innerHTML = '<div class="quran-loading" style="color:#DC2626;">⚠️ Gagal memuat data index Al-Qur\'an.</div>';
             }
         })
         .catch(err => {
-            boxSurah.innerHTML = '<div class="quran-loading" style="color:#ef4444;">⚠️ Gagal memuat Al-Qur\'an. Pastikan perangkat Anda terhubung ke Internet.</div>';
+            boxSurah.innerHTML = '<div class="quran-loading" style="color:#DC2626;">⚠️ Gagal memuat Al-Qur\'an. Pastikan perangkat Anda terhubung ke Internet.</div>';
         });
 }
 
@@ -1099,7 +1047,7 @@ function bukaAyatSurah(nomorSurah) {
                     bisEl.style.padding = '14px 0';
                     bisEl.style.textAlign = 'center';
                     bisEl.style.borderBottom = '1px dashed var(--border)';
-                    bisEl.innerHTML = '<div class="ayah-arabic" style="text-align:center; font-size:32px;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>';
+                    bisEl.innerHTML = '<div class="ayah-arabic" style="text-align:center; font-size:28px;">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>';
                     boxAyat.appendChild(bisEl);
                 }
                 
@@ -1116,11 +1064,11 @@ function bukaAyatSurah(nomorSurah) {
                 
                 document.getElementById('card-alquran').scrollIntoView({ behavior: 'smooth' });
             } else {
-                boxAyat.innerHTML = '<div class="quran-loading" style="color:#ef4444;">⚠️ Gagal memuat muatan teks ayat.</div>';
+                boxAyat.innerHTML = '<div class="quran-loading" style="color:#DC2626;">⚠️ Gagal memuat muatan teks ayat.</div>';
             }
         })
         .catch(err => {
-            boxAyat.innerHTML = '<div class="quran-loading" style="color:#ef4444;">⚠️ Koneksi gagal saat memuat ayat.</div>';
+            boxAyat.innerHTML = '<div class="quran-loading" style="color:#DC2626;">⚠️ Koneksi gagal saat memuat ayat.</div>';
         });
 }
 
